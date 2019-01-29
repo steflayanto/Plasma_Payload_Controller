@@ -37,30 +37,30 @@ void loop() {
 
 //Performs all initialization of sensors
 void initSensors() {
-  //put all sensor initialization code here
+  initLSM();
 }
 
 //Performs all sensor updates
 void updateSensors() {
-  //put all sensor initialization code here
+  
 }
 
-//Interacts with slave logger device
+//Makes approximation of timer based on flight stage
 void updateFlightStage() {
-  //put all sensor initialization code here
+  
 }
 
 //Interacts with slave logger device
 void transmitToLogger() {
-  //put all sensor initialization code here
+  
 }
 
-//Decides whether to activate plasma
+//Decides whether to activate plasma (Stefan, Lexie, & Usman)
 boolean triggerConditionsMet() {
   //Code will consider sensor data and flight stage and make a decision
 }
 
-//Activates Plasma Payload
+//Activates Plasma Payload (Chris & Smriti)
 boolean activatePlasma() {
-  //Code will consider
+  //Smriti & Chris Phan's code to activate plasma
 }
