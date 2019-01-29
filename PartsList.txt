@@ -1,0 +1,10 @@
+-	1 x Arduino UNO + Serial Cable
+-	1 x Primary Altimeter (SparkFun 9DoF Razor IMU M0)
+-	Secondary Altimeters
+o	9DoF IMU (LSM9DS0 IMU)
+o	Barometer BME280
+o	TBD
+o	TBD
+-	1 x Breadboard
+-	1 x Buzzer
+-	Wires
