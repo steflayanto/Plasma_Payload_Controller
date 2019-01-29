@@ -15,6 +15,10 @@
  * 12
  * 13
  */
+#include <Wire.h>
+#include <Adafruit_LSM9DS0.h>
+#include <Adafruit_Sensor.h>  // not used in this demo but required!
+
 
 #define PIN_NAME 1
 #define OTHER PIN_NAME 2
