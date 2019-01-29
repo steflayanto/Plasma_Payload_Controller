@@ -34,6 +34,7 @@ void initMPU() {
   }
   imu.setSensors(INV_XYZ_GYRO | INV_XYZ_ACCEL | INV_XYZ_COMPASS);
   // There are functions for range and sample rate on gyro/accel
+  // No function for range of magnetometer AFAIK
   // mpu.setSampleRate(hz); // Controls gyro and accel 4hz-1KHz
   // mpu.setCompassSampleRate(hz); // Magnetometer 1-100hz
   // mpu.setAccelFSR(value); // +/- 2, 4, 8, 16g
