@@ -38,6 +38,7 @@ void loop() {
 //Performs all initialization of sensors
 void initSensors() {
   initLSM();
+  initMPU();
 }
 
 //Performs all sensor updates
