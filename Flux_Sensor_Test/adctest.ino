@@ -1,8 +1,11 @@
 #include <Wire.h>
 #include <Adafruit_ADS1015.h>
 
-const size_t adcCount = 4;
+// Global Variables
+const int adcCount = 4;
 const int seebeck = 40; // Rough estimated coefficient given by PHFS doc; not exact!
+
+// Sensors; assuming 1:1 PHFS:ADC
 Adafruit_ADS1115 adcs[adcCount] = {
   Adafruit_ADS1115(0x48);
   Adafruit_ADS1115(0x49);
@@ -15,10 +18,9 @@ float sensitivities[adcCount] = {
 }
 
 void adcSetup() {
-  adc1.begin();
-  adc2.begin();
-  adc3.begin();
-  adc4.begin();
+  for (int i = 0; i < adcCount; i++) {
+    adcs[i].begin(); 
+  }
   adcTestSetup();
 }
 
