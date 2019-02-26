@@ -28,11 +28,11 @@ void initLSM() {
 
 void initMPU() {
   Serial.println("Setting up MPU9250 IMU... ");
-  if (mpu.begin() != INV_SUCCESS) {
-    Serial.println("ERROR: Unable to intialize MPU.")
+  if (!mpu.begin()) {
+    Serial.println("ERROR: Unable to intialize MPU.");
     while(1);
   }
-  imu.setSensors(INV_XYZ_GYRO | INV_XYZ_ACCEL | INV_XYZ_COMPASS);
+  //mpu.setSensors(INV_XYZ_GYRO | INV_XYZ_ACCEL | INV_XYZ_COMPASS);
   // There are functions for range and sample rate on gyro/accel
   // No function for range of magnetometer AFAIK
   // mpu.setSampleRate(hz); // Controls gyro and accel 4hz-1KHz

@@ -1,8 +1,9 @@
-#include "Header.h"
+  #include "Header.h"
 
 //Global Variables
+unsigned long launchTime;
 boolean activated = false;  // Stores whether plasma has already been activated
-int flightStage = 0;      // Stores expected flight stage:
+short flightStage = 0;      // Stores expected flight stage:
                           /*  Flight stages:
                            *  0: pre-launch
                            *  1: engine-burn
@@ -12,6 +13,7 @@ int flightStage = 0;      // Stores expected flight stage:
                            */
 //Sensor Objects
 Adafruit_LSM9DS0 lsm = Adafruit_LSM9DS0();
+MPU9250 mpu(Wire,0x68);
 
 void setup() {
 #ifndef ESP8266
@@ -28,7 +30,7 @@ void loop() {
   if (activated) {
     return; //if already running, don't do anything below
   }
-  if (triggerConditionsMet()) {
+  if (checkTriggerConditions()) {
     activatePlasma();
     activated = true;;
   }
@@ -48,7 +50,22 @@ void updateSensors() {
 
 //Makes approximation of timer based on flight stage
 void updateFlightStage() {
-  
+  if (flightStage == 0) {
+    flightStage = checkForLaunch();
+    return; //Don't do anything else if haven't launched
+  }
+  if (millis() - launchTime > DESCENT_TIME) {
+    flightStage = 4;
+  }else if (millis() - launchTime > APOGEE_TIME) {
+    flightStage = 3;
+  }else if (millis() - launchTime > ENGINE_CUT_TIME) {
+    flightStage = 2;
+  }
+}
+
+short checkForLaunch() {
+  launchTime = millis();
+  return 1;
 }
 
 //Interacts with slave logger device
@@ -57,8 +74,9 @@ void transmitToLogger() {
 }
 
 //Decides whether to activate plasma (Stefan, Lexie, & Usman)
-boolean triggerConditionsMet() {
+boolean checkTriggerConditions() {
   //Code will consider sensor data and flight stage and make a decision
+  return decisionAlgorithm();
 }
 
 //Activates Plasma Payload (Chris & Smriti)

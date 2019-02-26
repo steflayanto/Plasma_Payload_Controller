@@ -11,13 +11,18 @@ void setup() {
   //The millis function returns the time that has passed since the program started in milliseconds. millis() returns an unsigned long, so our timer has to be an unsigned long too.
   timer = millis();
   //When starting, set timer equal to millis()
+  
 }
-
+int counter = 0;
 void loop() {
   unsigned long loopTime = millis() - timer; //time that has passed since last loop is the current 'millis()' value subtracted by the previous millis() value which we saved in 'timer'
   Serial.println("loop took " + String(loopTime) + " milliseconds."); //Print that value to the monitor
   timer = millis();  //Update the timer to be the current millis value
-
+  
   //The rest of the code goes here
+  //Tools -> board -> arduino Uno
+  //Tools -> port -> choose the right port.
+  //serial monitor. baud rate 9600
+  delay(100);
   
 }
