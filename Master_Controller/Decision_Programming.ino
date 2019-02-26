@@ -9,7 +9,7 @@ boolean decisionAlgorithm() {
     return primaryTrigger() || ((int) imuTrigger() + (int) baroTrigger() + (int) accelTrigger() > 1);
   }else if (flightStage == 3) { //late-coast-phase: any sensors can trigger
     return primaryTrigger() || imuTrigger() || baroTrigger() || accelTrigger();
-  }else if (flightStage >= 4) { //apogee: just trigger if still hasn't
+  }else if (flightStage >= 4) { //descent: just trigger if still hasn't
     return false;
   }
 }
