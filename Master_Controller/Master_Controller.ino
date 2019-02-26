@@ -7,9 +7,9 @@ short flightStage = 0;      // Stores expected flight stage:
                           /*  Flight stages:
                            *  0: pre-launch
                            *  1: engine-burn
-                           *  2: coast-phase
-                           *  3: apogee
-                           *  4: descent
+                           *  2: early-coast-phase
+                           *  3: late-coast-phase
+                           *  4: apogee
                            */
 //Sensor Objects
 Adafruit_LSM9DS0 lsm = Adafruit_LSM9DS0();
@@ -32,7 +32,7 @@ void loop() {
   }
   if (checkTriggerConditions()) {
     activatePlasma();
-    activated = true;;
+    activated = true;
   }
 }
 
