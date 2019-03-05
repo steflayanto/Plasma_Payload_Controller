@@ -21,7 +21,7 @@ float sensitivities[adcCount] = {
 void adcSetup() {
   for (int i = 0; i < adcCount; i++) {
     adcs[i].begin(); 
-    adcs[i].setGain(GAIN_EIGHT); // Input range +/- 512mV, 1 bit = 0.25mV
+    adcs[i].setGain(GAIN_FOUR); // Input range +/- 1.024V, 1 bit = 0.5mV
   }
   adcTestSetup();
 }
