@@ -46,3 +46,8 @@ float BMEhum() {
   float val = bme.readHumidity();
   return val;
 }
+
+//copy whole thing
+//global var, copy only calll funtion
+//global var go on top of sensors
+//update header
