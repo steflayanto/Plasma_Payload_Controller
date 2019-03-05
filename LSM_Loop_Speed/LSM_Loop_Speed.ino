@@ -4,7 +4,7 @@
 #include <Adafruit_LSM9DS0.h>
 #include <Adafruit_Sensor.h>  
 Adafruit_LSM9DS0 lsm = Adafruit_LSM9DS0();
-
+int accelX, accelY, accelZ;
 
 unsigned long timer;
 
@@ -62,7 +62,7 @@ void loop() {
   Serial.println("loop took " + String(loopTime) + " milliseconds."); //Print that value to the monitor
 
   timer = millis();  //Update the timer to be the current millis value
-
+  accelX = lsm.accelData.x;
 //  Serial.print("Temp: "); Serial.print((int)lsm.temperature);    Serial.println(" ");
 
 
