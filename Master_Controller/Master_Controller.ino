@@ -3,7 +3,7 @@
 //Global Variables
 unsigned long launchTime;
 boolean activated = false;  // Stores whether plasma has already been activated
-short flightStage = 0;      // Stores expected flight stage:
+float weighedFlightStage = 0;      // Stores expected flight stage:
                           /*  Flight stages:
                            *  0: pre-launch
                            *  1: engine-burn

@@ -12,7 +12,6 @@ void setup() {
   while (!Serial);     // For running on ESP boards. Will pause until serial console opens
   #endif
   Serial.begin(116200);
-  
   Serial.print("Initializing SD card...");  // see if the card is present and can be initialized:
   if (!SD.begin(CHIP_SELECT)) {
     Serial.println("Card failed, or not present");
@@ -31,7 +30,7 @@ void loop() {
   String dataString = "";
   // open the file. note that only one file can be open at a time,
   // so you have to close this one before opening another.
-  String fileName = "log" + String(fileCount) + ".txt";
+  String fileName = "log" + String(fileCount) + ".csv";
   File dataFile = SD.open(fileName, FILE_WRITE);
   if (dataFile) { // if the file is available, write to it:
     dataFile.println(dataString);
@@ -41,6 +40,7 @@ void loop() {
   } else {
     Serial.println("error opening " + fileName);
   }
+  //Option to do binary file IO if problems with write speed/storage speed.
 }
 
 void initSensors() {
