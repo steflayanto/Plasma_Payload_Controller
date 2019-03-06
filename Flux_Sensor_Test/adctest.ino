@@ -8,15 +8,15 @@ const int seebeck = 40; // Rough estimated coefficient given by PHFS doc; not ex
 // Sensors; assuming 1:1 PHFS:ADC
 // When wiring, different addresses need different connections for ADR port!
 Adafruit_ADS1115 adcs[adcCount] = {
-  Adafruit_ADS1115(0x48);
-  Adafruit_ADS1115(0x49);
-  Adafruit_ADS1115(0x4A);
-  Adafruit_ADS1115(0x4B);
-}
+  Adafruit_ADS1115(0x48)
+  Adafruit_ADS1115(0x49)
+  Adafruit_ADS1115(0x4A)
+  Adafruit_ADS1115(0x4B)
+};
 
 float sensitivities[adcCount] = {
   // Hardcoded sensors-specific sensitivity values
-}
+};
 
 void adcSetup() {
   for (int i = 0; i < adcCount; i++) {

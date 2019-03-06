@@ -40,12 +40,13 @@ void loop() {
 //Performs all initialization of sensors
 void initSensors() {
   initLSM();
-  initMPU();
+  initBME();
 }
 
 //Performs all sensor updates
 void updateSensors() {
-  
+  updateLSM();
+  updateBME();
 }
 
 //Makes approximation of timer based on flight stage

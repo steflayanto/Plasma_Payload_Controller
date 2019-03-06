@@ -26,17 +26,17 @@ void initLSM() {
   //lsm.setupGyro(lsm.LSM9DS0_GYROSCALE_2000DPS);
 }
 
-void initMPU() {
-  Serial.println("Setting up MPU9250 IMU... ");
-  if (!mpu.begin()) {
-    Serial.println("ERROR: Unable to intialize MPU.");
-    while(1);
+void initBME() {
+  //in setup
+  Serial.begin(9600);
+  Serial.println(F("BME280 test"));
+
+  bool status;
+
+  status = bme.begin();
+  if (!status) {
+    Serial.println("Could not find a valid BME280 sensor, check wiring!");
+    while (1);
   }
-  //mpu.setSensors(INV_XYZ_GYRO | INV_XYZ_ACCEL | INV_XYZ_COMPASS);
-  // There are functions for range and sample rate on gyro/accel
-  // No function for range of magnetometer AFAIK
-  // mpu.setSampleRate(hz); // Controls gyro and accel 4hz-1KHz
-  // mpu.setCompassSampleRate(hz); // Magnetometer 1-100hz
-  // mpu.setAccelFSR(value); // +/- 2, 4, 8, 16g
-  // mpu.setGyroFSR(value); // +/- 250, 500, 1000, 2000 dps
+
 }
