@@ -1,5 +1,6 @@
-//Global var
-float temp, pressure, alt, hum;
+//Global variables 
+float btemp, pressure, alt, hum; //BME
+float accelX, accelY, accelZ, magX, magY, magZ, gyroX, gyroY, gyroZ, ltemp; //LSM
 
 // SETUP Code
 void initLSM() {
@@ -45,7 +46,7 @@ void initBME() {
 }
 
 float BMEtemp() {
-  temp = bme.readTemperature();
+  btemp = bme.readTemperature();
 }
 
 float BMEpressure() {
@@ -58,4 +59,44 @@ float BMEalt() {
 
 float BMEhum() {
   hum = bme.readHumidity();
+}
+
+float LSMaccelX() {
+  accelX = lsm.accelData.x;
+}
+
+float LSMaccelY() {
+  accelY = lsm.accelData.y;
+}
+
+float LSMaccelZ() {
+  accelZ = lsm.accelData.z;
+}
+
+float LSMmagX() {
+  magX = lsm.magData.x;
+}
+
+float LSMmagY() {
+  magY = lsm.magData.y;
+}
+
+float LSMmagZ() {
+  magZ = lsm.magData.z;
+}
+
+float LSMgyroX() {
+  gyroX = lsm.gyroData.x;
+}
+
+float LSMgyroY() {
+  gyroY = lsm.gyroData.Y;
+}
+
+float LSMgyroZ() {
+  gyroZ = lsm.gyroData.Z;
+}
+
+float LSMtemp(){
+  ltemp = lsm.temperature;
 }

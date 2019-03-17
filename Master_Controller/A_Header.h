@@ -16,6 +16,7 @@
  * 13
  */
 #include <Wire.h>
+#include <SPI.h>
 #include <Adafruit_LSM9DS0.h>
 #include <Adafruit_BME280.h>
 #include <Adafruit_Sensor.h>  // Used for all Adafruit Sensors
@@ -43,7 +44,6 @@ Adafruit_LSM9DS0 lsm = Adafruit_LSM9DS0();
 Adafruit_BME280 bme; // I2C
 
 //BME
-#include <SPI.h>
 #define BME_SCK 13
 #define BME_MISO 12
 #define BME_MOSI 11
