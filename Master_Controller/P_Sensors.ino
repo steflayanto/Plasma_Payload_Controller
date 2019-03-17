@@ -1,3 +1,6 @@
+//Global var
+float temp, pressure, alt, hum;
+
 // SETUP Code
 void initLSM() {
   Serial.print("Setting up LSM9DS0 IMU... ");
@@ -6,14 +9,14 @@ void initLSM() {
     while (1);
   }
   Serial.println("Success.");
-  
+
   // 1.) Set the accelerometer range
   lsm.setupAccel(lsm.LSM9DS0_ACCELRANGE_2G);
   //lsm.setupAccel(lsm.LSM9DS0_ACCELRANGE_4G);
   //lsm.setupAccel(lsm.LSM9DS0_ACCELRANGE_6G);
   //lsm.setupAccel(lsm.LSM9DS0_ACCELRANGE_8G);
   //lsm.setupAccel(lsm.LSM9DS0_ACCELRANGE_16G);
-  
+
   // 2.) Set the magnetometer sensitivity
   lsm.setupMag(lsm.LSM9DS0_MAGGAIN_2GAUSS);
   //lsm.setupMag(lsm.LSM9DS0_MAGGAIN_4GAUSS);
@@ -39,4 +42,20 @@ void initBME() {
     while (1);
   }
 
+}
+
+float BMEtemp() {
+  temp = bme.readTemperature();
+}
+
+float BMEpressure() {
+  pressure = bme.readPressure() / 100.0F; //hPa
+}
+
+float BMEalt() {
+  alt = bme.readAltitude(SEALEVELPRESSURE_HPA);
+}
+
+float BMEhum() {
+  hum = bme.readHumidity();
 }

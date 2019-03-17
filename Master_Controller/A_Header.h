@@ -17,6 +17,7 @@
  */
 #include <Wire.h>
 #include <Adafruit_LSM9DS0.h>
+#include <Adafruit_BME280.h>
 #include <Adafruit_Sensor.h>  // Used for all Adafruit Sensors
 
 #define PIN_NAME 1
@@ -41,3 +42,10 @@ float weightedFlightStage = 0;      // Stores expected flight stage:
 Adafruit_LSM9DS0 lsm = Adafruit_LSM9DS0();
 Adafruit_BME280 bme; // I2C
 
+//BME
+#include <SPI.h>
+#define BME_SCK 13
+#define BME_MISO 12
+#define BME_MOSI 11
+#define BME_CS 10
+#define SEALEVELPRESSURE_HPA (1013.25)
