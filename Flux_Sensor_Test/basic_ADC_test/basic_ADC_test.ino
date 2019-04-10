@@ -21,6 +21,7 @@ void loop() {
 //  Serial.println(t);
   Serial.print("f1: ");
   Serial.println(f1);
+  Serial.print("f2: ");
   Serial.println(f2);
   delay(400);
 }
