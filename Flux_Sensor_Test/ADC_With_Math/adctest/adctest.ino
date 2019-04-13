@@ -28,9 +28,9 @@ void adcSetup() {
 
 void adcLoop() {
   float flux[adcCount];
-  int16_t tempDelta; // Can be one general value for all ADCs or read individuall
+  int16_t tempDelta = adcs[0].adc.readADC_Differential_2_3(); // Can be one general value for all ADCs or read individuall
   float temp = tempSens.readTempC(); // Sensitivity calculation uses Celsius!
-  temp += tempCalc(tempDelta); // Adds the differential voltage converted to temperature to get sensor temp
+  temp += tempDeltaCalc(tempDelta); // Adds the differential voltage converted to temperature to get sensor temp
   for (int i = 0; i < adcCount; i++) {
     flux[i] = adcs[i].adc.readADC_Differential_0_1() / sensCalc(adcs[i].sensitivity, temp);
     testADC(flux);
@@ -44,7 +44,7 @@ float sensCalc(float sens, int temp) {
 }
 
 // Returns temperature difference for given voltage difference
-float tempCalc(int16_t delta) {
+float tempDeltaCalc(int16_t delta) {
   return (float) delta / seebeck; // values are int16_t and int, so have to cast
 }
 
