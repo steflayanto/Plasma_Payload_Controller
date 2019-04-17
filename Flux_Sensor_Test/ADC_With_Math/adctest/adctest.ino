@@ -9,21 +9,20 @@
 
 TMP102 tempSens(0x48);
 
-const int adcCount = 4;
+const int adcCount = 1;
 const int seebeck = 40; // Rough estimated coefficient given by PHFS doc; not exact!
 const float sensMultiplier = .003334;
 const float sensOffset = .918;
 
 // IMPORTANT: This assumes that the sensors are in ascending order with 10151 on 0x48 and 10154 on 0x4B!
-sensor adcs[adcCount] = {{Adafruit_ADS1115(0x48), 1.55}, {Adafruit_ADS1115(0x49), 1.55},
-                         {Adafruit_ADS1115(0x4A), 1.48}, {Adafruit_ADS1115(0x4B), 1.58},};
+sensor adcs[adcCount] = {{Adafruit_ADS1115(), 1.55}};//, {Adafruit_ADS1115(0x49), 1.55},
+                         //{Adafruit_ADS1115(0x4A), 1.48}, {Adafruit_ADS1115(0x4B), 1.58},};
 
 void adcSetup() {
   for (int i = 0; i < adcCount; i++) {
     adcs[i].adc.begin(); 
-    adcs[i].adc.setGain(GAIN_FOUR); // Input range +/- 1.024V, 1 bit = 0.5mV
+ //   adcs[i].adc.setGain(GAIN_FOUR); // Input range +/- 1.024V, 1 bit = 0.5mV
   }
-  adcTestSetup();
 }
 
 void adcLoop() {
@@ -59,15 +58,16 @@ void testADC(float a[]) {
 
 
 void adcTestSetup() {
-  Serial.begin(9600); 
 }
 
 // These setup and loop functions are so you can test with this program as a standalone
 // in final product these will be gone
 void setup() {
+  Serial.begin(9600);
   adcSetup();
 }
 
 void loop() {
   adcLoop();
+  delay(250);
 }
