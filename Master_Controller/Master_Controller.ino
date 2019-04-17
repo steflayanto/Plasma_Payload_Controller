@@ -11,7 +11,7 @@ void setup() {
 void loop() {
   updateSensors();
   transmitToLogger();
-  weightedFlightStage = decisionAlgorithm()
+  weightedFlightStage = decisionAlgorithm();
   if (activated) {
     return; //if already running, don't do anything below
   }
@@ -31,7 +31,7 @@ void initSensors() {
 //Performs all sensor updates
 void updateSensors() {
   updateLSM();
-  updateBME();
+  updateBME();  
 }
 
 //Interacts with slave logger device
