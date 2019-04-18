@@ -67,7 +67,15 @@ void setup() {
   adcSetup();
 }
 
+void bandaid() {
+  int16_t f, tdiff;
+  f = adcs[0].adc.readADC_Differential_0_1();
+  tdiff = adcs[0].adc.readADC_Differential_2_3();
+  Serial.println(f + "," + tdiff);
+}
+
 void loop() {
-  adcLoop();
+  bandaid();
+  // adcLoop();
   delay(250);
 }
