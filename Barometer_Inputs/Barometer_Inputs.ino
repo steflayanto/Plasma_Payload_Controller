@@ -1,6 +1,8 @@
 float input;
 int interval = 50, amount;
 unsigned long timer;
+float RightInput = 0, LeftInput = 0, CentralInput = 0;
+float secondDerivative(int tempInterval);
 
 void setup() {
   Serial.begin(9600);
@@ -29,11 +31,28 @@ void updateInput(boolean prints) {
     input = 30000;
     amount = -50;
   }
-  if (millis() - timer > interval) {
+  int tempInterval = millis() - timer;
+  // which will act as dt
+  if (tempInterval > interval) {
     input += amount;
+    LeftInput = CentralInput;
+    CentralInput = RightInput;
+    RightInput = input;
     timer = millis();
     if (prints){
       Serial.println(input);
+      Serial.println(secondDerivative(tempInterval));
     }
   }
 }
+
+/*
+*   @para: Time interval of time difference
+*   Global parameters: LeftInput, RightInput, CentralInput
+*   Estimation function of second derivative using Taylor Expansion
+*   Error EstimatedL O(dt^3)
+*   April 21th by Kaiser Sun
+*/
+float secondDerivative(int tempInterval) {
+    return (LeftInput - 2*CentralInput + RightInput) / tempInterval*tempInterval;
+  }
