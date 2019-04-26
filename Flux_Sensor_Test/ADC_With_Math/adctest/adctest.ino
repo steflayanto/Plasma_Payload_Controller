@@ -9,7 +9,7 @@
 
 TMP102 tempSens(0x48);
 
-const int adcCount = 1;
+const int adcCount = ?  ;
 const int seebeck = 40; // Rough estimated coefficient given by PHFS doc; not exact!
 const float sensMultiplier = .003334;
 const float sensOffset = .918;
