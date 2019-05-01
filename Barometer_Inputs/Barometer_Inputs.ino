@@ -54,5 +54,5 @@ void updateInput(boolean prints) {
 *   April 21th by Kaiser Sun
 */
 float secondDerivative(int tempInterval) {
-    return (LeftInput - 2*CentralInput + RightInput) / tempInterval*tempInterval;
+    return (LeftInput - 2*CentralInput + RightInput) / (tempInterval*tempInterval);
   }
