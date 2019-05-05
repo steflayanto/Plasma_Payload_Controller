@@ -49,12 +49,12 @@ int bmeDecision(){
 
 //test alt from my bed
   float factor = 0;
-  int lowBurn = 21;
-  int highBurn = 21.5;
-  int lowEarly = 21.5;
-  int highEarly = 22;
-  int lowLate = 22;
-  int highLate = 22.5; 
+  int lowBurn = 22;
+  int highBurn = 22.5;
+  int lowEarly = 22.5;
+  int highEarly = 23;
+  int lowLate = 23;
+  int highLate = 23.5; 
   
   //map to flight stages, mapping
   if (alt < lowBurn){
