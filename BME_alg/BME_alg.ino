@@ -33,8 +33,8 @@ void setup() {
 
 void loop() {
   alt = bme.readAltitude(SEALEVELPRESSURE_HPA);
-  Serial.println(alt); 
-  //Serial.println(bmeDecision()); 
+  //Serial.println(alt); 
+  Serial.println(bmeDecision()); 
 }
 
 int bmeDecision(){
@@ -47,6 +47,7 @@ int bmeDecision(){
 //  int lowLate = 21350;
 //  int highLate = 27067; 
 
+//test alt from my bed
   float factor = 0;
   int lowBurn = 21;
   int highBurn = 21.5;
@@ -56,22 +57,22 @@ int bmeDecision(){
   int highLate = 22.5; 
   
   //map to flight stages, mapping
-  if (alt < 100){
+  if (alt < lowBurn){
     return 0;
   } else{
     //w/o throttle, burn = 10 sec = 10000 ft
     //1 burn
     if (alt < highBurn){
-    map(constrain(alt, lowBurn, highBurn), lowBurn, highBurn, 1 - factor, 1 + factor);
+      return map(constrain(alt, lowBurn, highBurn), lowBurn, highBurn, 1 - factor, 1 + factor);
     }else if(alt < highEarly) {
     //2 early coast
-    map(constrain(alt, lowEarly, highEarly), lowEarly, highEarly, 2 - factor, 2 + factor);
+      return map(constrain(alt, lowEarly, highEarly), lowEarly, highEarly, 2 - factor, 2 + factor);
     } else if(alt < highLate) {
     //3 late coast
-    map(constrain(alt, lowLate, highLate), lowLate, highLate, 3 - factor, 3 + factor);
+      return map(constrain(alt, lowLate, highLate), lowLate, highLate, 3 - factor, 3 + factor);
     } else{
     //4 decent = 26067 and down
-    map(alt, 100, 1000, 3, 4);
+      return map(alt, 100, 1000, 3, 4);
     }  
 }
 }
