@@ -40,13 +40,21 @@ void loop() {
 int bmeDecision(){
   // pull alt
   alt = bme.readAltitude(SEALEVELPRESSURE_HPA);
+  //variables
+  float factor = 0.2;
+  int lowBurn = 100;
+  int highBurn = 15000;
+  int lowEarly = 15000;
+  int highEarly = 21350;
+  int lowLate = 21350;
+  int highLate = 27067; 
   //map to flight stages, mapping
   if (alt < 100){
     return 0;
   } else{
     //w/o throttle, burn = 10 sec = 10000 ft
     //1 burn
-    map(alt, 100, 10000, 0, 1);
+    map(constrain(alt, lowBurn, highBurn), lowBurn, highBurn, 1, 1);
     //2 early coast
     map(alt, 100, 1000, 1, 2);
     //3 late coast
