@@ -54,22 +54,13 @@ int bmeDecision(){
   } else{
     //w/o throttle, burn = 10 sec = 10000 ft
     //1 burn
-    map(constrain(alt, lowBurn, highBurn), lowBurn, highBurn, 1, 1);
+    map(constrain(alt, lowBurn, highBurn), lowBurn, highBurn, 1 - factor, 1 + factor);
     //2 early coast
-    map(alt, 100, 1000, 1, 2);
+    map(constrain(alt, lowEarly, highEarly), lowEarly, highEarly, 2 - factor, 2 + factor);
     //3 late coast
-    map(alt, 100, 1000, 2, 3);
+    map(constrain(alt, lowLate, highLate), lowLate, highLate, 3 - factor, 3 + factor);
     //4 decent = 26067 and down
     map(alt, 100, 1000, 3, 4);
     
-    //w/ throttle burn = 21 sec = 15000
-    //1 burn
-    map(alt, 100, 15000, 0, 1);
-    //2 early coast
-    map(alt, 100, 1000, 1, 2);
-    //3 late coast
-    map(alt, 100, 1000, 2, 3);
-    //4 decent = 27700 and down
-    map(alt, 100, 1000, 3, 4);
 }
 }
