@@ -22,11 +22,11 @@ Adafruit_LSM9DS0 lsm = Adafruit_LSM9DS0();
 void setupSensor()
 {
   // 1.) Set the accelerometer range
-  lsm.setupAccel(lsm.LSM9DS0_ACCELRANGE_2G);
+  //lsm.setupAccel(lsm.LSM9DS0_ACCELRANGE_2G);
   //lsm.setupAccel(lsm.LSM9DS0_ACCELRANGE_4G);
   //lsm.setupAccel(lsm.LSM9DS0_ACCELRANGE_6G);
   //lsm.setupAccel(lsm.LSM9DS0_ACCELRANGE_8G);
-  //lsm.setupAccel(lsm.LSM9DS0_ACCELRANGE_16G);
+  lsm.setupAccel(lsm.LSM9DS0_ACCELRANGE_16G);
   
   // 2.) Set the magnetometer sensitivity
   lsm.setupMag(lsm.LSM9DS0_MAGGAIN_2GAUSS);
@@ -62,6 +62,7 @@ void setup()
 int flightStage = 0;
 boolean activate = false;
 boolean safetyEnvelope = true;
+double maxDrag;
 
 void loop() 
 {
@@ -84,6 +85,11 @@ void loop()
   Serial.print(zAccel);
   delay(50);
 
+  //updating the maximum drag value all flight
+  if(zAccel > maxDrag){
+    maxDrag = zAccel;
+    }
+
   //Safety Envelope
   if(xAccel >= xMax || yAccel >= yMax){
     safetyEnvelope = false;
@@ -92,19 +98,31 @@ void loop()
    //maybe I should change this to <=-12 or something because during burn the IMU will feel multiple g's
    //using near() function you can create a buffer
    if(zAccel == -9.81){ //need to include noise buffer
-      flightStage == 0;
+      flightStage == 0; //pre-launch, do not activate at all
     } else if(zAccel < -9.81){
-      flightStage == 1;
-    } else if(zAccel >= 0){
-      flightStage == 2;
+      flightStage == 1; // burn
+    } else if(zAccel >= 0){ 
+      flightStage == 2; //early-coast, this is when we want to activate the plasma
+    } else if(zAccel <= maxDrag/2 && zAccel != 0){
+      flightStage == 3; //late-coast, if plasma isn't activated yet then activate it now
+    } else if(zAccel == 0){
+      flightStage == 4; //descent, do not activate at all
     }
 
-    if(flightStage == 2 && safetyEnvelope){
+    //to differentiate between early and late coast: after burn, save the acceleration value from the IMU
+    //that acceleration value is the maximum drag that the rocket will feel during flight
+
+    //boolean switch to tell actuator to turn on
+    if(flightStage == 2 || flightStage == 3 && safetyEnvelope){ 
       activate = true;
       }
 
+    //printing flight stages for testing
     Serial.print("     Flight Stage: ");
     Serial.print(flightStage);
+    if(activate){
+      Serial.print("... ACTIVATED");
+    }
     Serial.println();
 
   
