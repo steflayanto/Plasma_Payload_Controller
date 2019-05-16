@@ -12,8 +12,8 @@
 */
 
 #if defined(ARDUINO_SAMD_ZERO) && defined(SERIAL_PORT_USBVIRTUAL)
-  // Required for Serial on Zero based boards
-  #define Serial SERIAL_PORT_USBVIRTUAL
+// Required for Serial on Zero based boards
+#define Serial SERIAL_PORT_USBVIRTUAL
 #endif
 
 #include <SPI.h>
@@ -31,8 +31,10 @@
 Adafruit_BME280 bme; // I2C
 
 const int chipSelect = 4;
+const int altOffset = 120;
 unsigned long startTime = 0;
 float alt = 0;
+String file_name = "DATALOG.csv";
 
 void setup() {
   // Open serial communications and wait for port to open:
@@ -46,13 +48,25 @@ void setup() {
   Serial.print("Initializing SD card...");
 
   // see if the card is present and can be initialized:
-  if (!SD.begin()){//chipSelect)) {
+  if (!SD.begin(chipSelect)) {
     Serial.println("Card failed, or not present");
     // don't do anything more:
     while (1);
   }
   Serial.println("card initialized.");
 
+  File dataFile = SD.open(file_name, FILE_WRITE);
+  if (dataFile) {
+    dataFile.print("Time (milliseconds)");
+    dataFile.print(",");
+    dataFile.print("Altitude (meters)");
+    dataFile.print(",");
+    dataFile.print("Flight Stage (0-4)");
+    dataFile.println(",");
+    dataFile.close();
+  } else { // if the file isn't open, pop up an error:
+    Serial.println("error opening file.csv");
+  }
   startTime = millis();
   bme.begin();
 }
@@ -61,8 +75,8 @@ void loop() {
 
   // open the file. note that only one file can be open at a time,
   // so you have to close this one before opening another.
-  File dataFile = SD.open("datalog.csv", FILE_WRITE);
-  alt = bme.readAltitude(SEALEVELPRESSURE_HPA);
+  File dataFile = SD.open(file_name, FILE_WRITE);
+  alt = bme.readAltitude(SEALEVELPRESSURE_HPA) - altOffset;
   // if the file is available, write to it:
   if (dataFile) {
     dataFile.print(millis() - startTime);
@@ -73,15 +87,16 @@ void loop() {
     dataFile.println(",");
     dataFile.close();
     // print to the serial port too:
+    Serial.print(alt);
+    Serial.print(",");
     Serial.println(bmeDecision());
+  } else { // if the file isn't open, pop up an error:
+    Serial.println("error opening file");
   }
-  // if the file isn't open, pop up an error:
-  else {
-    Serial.println("error opening datalog.csv");
-  }
+  delay(20);
 }
 
-int bmeDecision() {
+float bmeDecision() {
   //map to flight stages, mapping
   if (alt < LOW_BURN) {
     return 0;
@@ -98,7 +113,7 @@ int bmeDecision() {
       return map(constrain(alt, LOW_LATE, HIGH_LATE), LOW_LATE, HIGH_LATE, 3 - FACTOR, 3 + FACTOR);
     } else {
       //4 decent = 26067 and down
-      return map(alt, 100, 1000, 3, 4);
+      return 4.0;//map(alt, 100, 1000, 3, 4);
     }
   }
 }
