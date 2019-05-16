@@ -32,12 +32,12 @@ void initLSM() {
 
 void initBME() {
   //in setup
-  Serial.begin(9600);
+  //Serial.begin(9600);
   Serial.println(F("BME280 test"));
 
   bool status;
 
-  status = bme.begin();
+  bmstatus = bme.begin();
   if (!status) {
     Serial.println("Could not find a valid BME280 sensor, check wiring!");
     while (1);
