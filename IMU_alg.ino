@@ -1,5 +1,6 @@
 #include <Wire.h>
 #include <SPI.h>
+#include <SD.h>
 #include <Adafruit_LSM9DS0.h>
 #include <Adafruit_Sensor.h>  // not used in this demo but required!
 
@@ -33,7 +34,7 @@ void setupSensor()
 void setup() {
 
   setupCheck();
-  datalogLegend();
+  //datalogLegend();
 
 }
 
@@ -104,10 +105,11 @@ void loop() {
   int yAccel = accel.acceleration.y;
   int zAccel = accel.acceleration.z;
   
-  delay(50); //this delay value can be changed, but might lead to more/less noise
+  delay(20); //this delay value can be changed, but might lead to more/less noise
   updateMaxDrag(zAccel);
   flightStage = flightStageDecision(zAccel);
-  printData(zAccel, flightStage, maxDrag, xAccel, yAccel);
+  File imuData = SD.open("imu_data.csv", FILE_WRITE);
+  logData(zAccel, flightStage, maxDrag, xAccel, yAccel, imuData);
 
   
 }
@@ -155,9 +157,9 @@ float flightStageDecision(float zAccel){
       flightStage = 0; //pre-launch, do not activate at all
     } else if(zAccel < -9.81){ // force of gravity plus engine thrust
       flightStage = 1; // burn
-    } else if(zAccel >= 0 && zAccel > maxDrag/2){  //drag
+    } else if(zAccel >= 0 && zAccel > maxDrag/2){  //force of drag
       flightStage = 2; //early-coast, this is when we want to activate the plasma
-    } else if(zAccel <= maxDrag/2 && zAccel != 0){ //drag, but less drag than before
+    } else if(zAccel <= maxDrag/2 && zAccel != 0){ //force of drag, but less drag than before
       flightStage = 3; //late-coast, if plasma isn't activated yet then activate it now
     } else if(zAccel >= -noiseBuffer && zAccel <= noiseBuffer){ //feels zero Gs in free fall; same noiseBuffer as pre-launch, 
                                                                 //maybe the buffer value should be different?
@@ -173,19 +175,23 @@ float flightStageDecision(float zAccel){
 
 //output for data logging ... CSV format
 //time, zAccel, flightStage, maxDrag, xAccel, yAccel
-void printData(float zAccel, float flightStage, float maxDrag, float xAccel, float yAccel){
+void logData(float zAccel, float flightStage, float maxDrag, float xAccel, float yAccel, File imuData){
 
-  Serial.print(millis());
-  Serial.print(", ");
-  Serial.print(zAccel);
-  Serial.print(", ");
-  Serial.print(flightStage);
-  Serial.print(", ");
-  Serial.print(maxDrag);
-  Serial.print(", ");
-  Serial.print(xAccel);
-  Serial.print(", ");
-  Serial.print(yAccel);
-  Serial.println();
-  
-  }
+  if(imuData){ 
+    imuData.print(millis());
+    imuData.print(", ");
+    imuData.print(zAccel);
+    imuData.print(", ");
+    imuData.print(flightStage);
+    imuData.print(", ");
+    imuData.print(maxDrag);
+    imuData.print(", ");
+    imuData.print(xAccel);
+    imuData.print(", ");
+    imuData.print(yAccel);
+    imuData.println();
+    imuData.close();
+  } else{
+      Serial.println("error opening file");
+    }
+}
