@@ -40,6 +40,9 @@ void setup() {
   // Open serial communications and wait for port to open:
   Serial.begin(115200);
 
+  //initialize built in LED
+  pinMode(LED_BUILTIN, OUTPUT);
+
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
   }
@@ -67,6 +70,13 @@ void setup() {
   } else { // if the file isn't open, pop up an error:
     Serial.println("error opening file.csv");
   }
+  for (int i = 0; i < 3; i++) {
+    digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
+    delay(1000);                       // wait for a second
+    digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
+    delay(500);                       // wait for a second
+  }
+  delay(500);
   startTime = millis();
   bme.begin();
 }
