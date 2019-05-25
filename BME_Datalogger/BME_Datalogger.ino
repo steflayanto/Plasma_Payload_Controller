@@ -75,7 +75,6 @@ void writeHeaders() {
   } else { // if the file isn't open, pop up an error:
     Serial.println("error opening file.csv");
   }
-<<<<<<< Updated upstream
   for (int i = 0; i < 3; i++) {
     digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
     delay(1000);                       // wait for a second
@@ -85,8 +84,6 @@ void writeHeaders() {
   delay(500);
   startTime = millis();
   bme.begin();
-=======
->>>>>>> Stashed changes
 }
 
 void loop() {
