@@ -47,17 +47,22 @@ void setup() {
     ; // wait for serial port to connect. Needed for native USB port only
   }
 
-
   Serial.print("Initializing SD card...");
 
   // see if the card is present and can be initialized:
   if (!SD.begin(chipSelect)) {
     Serial.println("Card failed, or not present");
-    // don't do anything more:
     while (1);
   }
   Serial.println("card initialized.");
   writeHeaders();
+  for (int i = 0; i < 3; i++) {
+    digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
+    delay(1000);                       // wait for a second
+    digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
+    delay(500);                       // wait for a second
+  }
+  digitalWrite(LED_BUILTIN, HIGH);
   startTime = millis();
   bme.begin();
 }
@@ -75,19 +80,9 @@ void writeHeaders() {
   } else { // if the file isn't open, pop up an error:
     Serial.println("error opening file.csv");
   }
-  for (int i = 0; i < 3; i++) {
-    digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
-    delay(1000);                       // wait for a second
-    digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
-    delay(500);                       // wait for a second
-  }
-  delay(500);
-  startTime = millis();
-  bme.begin();
 }
 
 void loop() {
-
   // open the file. note that only one file can be open at a time,
   // so you have to close this one before opening another.
   File dataFile = SD.open(file_name, FILE_WRITE);
