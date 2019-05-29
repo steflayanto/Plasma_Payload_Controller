@@ -31,24 +31,19 @@
 Adafruit_BME280 bme; // I2C
 
 const int chipSelect = 4;
-const int altOffset = 120;
+const int altOffset = -14;
 unsigned long startTime = 0;
 float alt = 0;
-String file_name = "DATALOG.csv";
+String file_name = "bme.csv";
 
 void setup() {
   // Open serial communications and wait for port to open:
   Serial.begin(115200);
-
-  //initialize built in LED
-  pinMode(LED_BUILTIN, OUTPUT);
-
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
   }
 
   Serial.print("Initializing SD card...");
-
   // see if the card is present and can be initialized:
   if (!SD.begin(chipSelect)) {
     Serial.println("Card failed, or not present");
@@ -56,20 +51,29 @@ void setup() {
   }
   Serial.println("card initialized.");
   writeHeaders();
-  for (int i = 0; i < 3; i++) {
-    digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
+  boolean status = bme.begin();  
+    if (!status) {
+        Serial.println("Could not find a valid BME280 sensor, check wiring!");
+        while (1);
+    }
+  pinMode(8, OUTPUT);
+  for (int i = 0; i < 2; i++) {
+    digitalWrite(8, HIGH);   // turn the LED on (HIGH is the voltage level)
     delay(1000);                       // wait for a second
-    digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
+    digitalWrite(8, LOW);    // turn the LED off by making the voltage LOW
     delay(500);                       // wait for a second
   }
-  digitalWrite(LED_BUILTIN, HIGH);
+  digitalWrite(8, HIGH);
+  Serial.println("Started");
   startTime = millis();
-  bme.begin();
+  delay(250);
+  digitalWrite(8, LOW);
 }
 
 void writeHeaders() {
   File dataFile = SD.open(file_name, FILE_WRITE);
   if (dataFile) {
+    dataFile.println(); // Print spacer
     dataFile.print("Time (milliseconds)");
     dataFile.print(",");
     dataFile.print("Altitude (meters)");
@@ -101,7 +105,13 @@ void loop() {
     Serial.print(",");
     Serial.println(bmeDecision());
   } else { // if the file isn't open, pop up an error:
-    Serial.println("error opening file");
+    //Serial.println("error opening file");
+    Serial.print(millis() - startTime);
+    Serial.print(",");
+    Serial.print(alt);
+    Serial.print(",");
+    Serial.print(bmeDecision());
+    Serial.println(",");
   }
   delay(20);
 }
