@@ -10,20 +10,21 @@
  const float A5 =  0.00000000000000000006048144;
  const float A6 =  -0.0000000000000000000000007293422;
 
-Adafruit_ADS1115 adc1(0x48);
-Adafruit_ADS1115 adc3(0x49);
-Adafruit_ADS1115 adc2(0x4B);
-Adafruit_ADS1115 dgoshit(0x4A);
+// top to bottom order
+Adafruit_ADS1115 adc1(0x4A);
+Adafruit_ADS1115 adc2(0x48);
+Adafruit_ADS1115 adc3(0x4B);
+Adafruit_ADS1115 adc4(0x49);
 void setup() {
   adc1.begin();
   adc2.begin();
   adc3.begin();
-  dgoshit.begin();
+  adc4.begin();
   Serial.begin(9600);
   adc1.setGain(GAIN_SIXTEEN);
   adc2.setGain(GAIN_SIXTEEN);
   adc3.setGain(GAIN_SIXTEEN);
-  dgoshit.setGain(GAIN_SIXTEEN);
+  adc4.setGain(GAIN_SIXTEEN);
 }
 
 //10152 sensor. Whatever ADC this one gets plugged into needs to switch the 01 and 23. Right now plugged into top ADC (4A). 
@@ -48,8 +49,8 @@ void loop() {
  
 
 
-  S4HF = dgoshit.readADC_Differential_0_1();
-  S4T = dgoshit.readADC_Differential_2_3();
+  S4HF = adc4.readADC_Differential_0_1();
+  S4T = adc4.readADC_Differential_2_3();
   T4 = temp(7.8125 * (float) S4T);
  
   
