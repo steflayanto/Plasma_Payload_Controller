@@ -6,6 +6,7 @@ void setup() {
 #endif
   Serial.begin(116200);
   initSensors();
+  relayInit();
 }
 
 void loop() {
@@ -16,7 +17,7 @@ void loop() {
     return; //if already running, don't do anything below
   }
   if (checkTriggerConditions()) {
-    activatePlasma();
+    trigger(10000, RELAY_PIN); //Run for 10 seconds
     activated = true;
   }
 }
@@ -43,9 +44,4 @@ void transmitToLogger() {
 boolean checkTriggerConditions() {
   //Code will consider sensor data and flight stage and make a decision
   return true;
-}
-
-//Activates Plasma Payload (Chris & Smriti)
-boolean activatePlasma() {
-  //Smriti & Chris Phan's code to activate plasma
 }

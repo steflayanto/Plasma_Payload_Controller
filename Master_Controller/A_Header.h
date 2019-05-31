@@ -10,7 +10,7 @@
  * 7
  * 8
  * 9
- * 10
+ * 10 FOR THE RELAY
  * 11
  * 12
  * 13
@@ -23,6 +23,7 @@
 
 #define PIN_NAME 1
 #define OTHER PIN_NAME 2
+#define RELAY_PIN 10                //this means before compiling, find RELAY replace with 10
 
 //Time Estimates (cumulative duration)
 #define LATE_COAST_TIME 0
