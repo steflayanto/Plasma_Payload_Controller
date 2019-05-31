@@ -1,0 +1,35 @@
+#include <Wire.h>
+#include <Adafruit_ADS1015.h>
+#include <SparkFunTMP102.h>
+
+//SCL to A5
+//SDA to A4
+//GND to GND
+//1.4 to 3.3V
+
+
+TMP102 tempSens(0x48);
+
+// These setup and loop functions are so you can test with this program as a standalone
+// in final product these will be gone
+void setup() {
+  Serial.begin(9600);
+}
+
+
+void loop() {
+  
+  unsigned long StartTime = millis();
+  Serial.begin(9600);
+  tempSens.begin();
+  unsigned long CurrentTime = millis(); 
+  float Tempurature;
+  Tempurature = tempSens.readTempF();
+  Serial.print(Tempurature);
+  Serial.print(", ");
+  Serial.print(CurrentTime);
+  Serial.println("");
+  // bandaid();
+  // adcLoop();
+  delay(250);
+}
