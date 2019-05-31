@@ -62,6 +62,7 @@ void loop() {
   float xAccel = lsm.accelData.x;
   float yAccel = lsm.accelData.y;
   float zAccel = lsm.accelData.z;
+//  float zAccel = accel.acceleration.z;
 
   delay(50); //this delay value can be changed, but might lead to more/less noise
   
@@ -84,6 +85,10 @@ void loop() {
     dataFile.close();
     plotReadings(xAccel, yAccel, zAccel);  
   } else {
+    Serial.print(zAccel);
+    Serial.print('\t');
+    Serial.print(flightStage);
+    Serial.print('\t');
     Serial.println("Error opening file for logging");
   }
   //logData(zAccel, flightStage, maxDrag, xAccel, yAccel);

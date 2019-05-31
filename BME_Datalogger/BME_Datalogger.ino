@@ -21,6 +21,14 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BME280.h>
 
+//This constant and struct are all that is needed for the MAF
+#define MAF_SIZE 5 // number of samples for the running avg
+struct {
+  float total;
+  float arr[MAF_SIZE];
+  int index;
+} filter;
+
 #define FACTOR 0.2
 #define LOW_BURN 10
 #define LOW_EARLY 20 // equiv HIGH_BURN
@@ -33,8 +41,10 @@ Adafruit_BME280 bme; // I2C
 const int chipSelect = 4;
 const int altOffset = -14;
 unsigned long startTime = 0;
-float alt = 0;
-String file_name = "bme.csv";
+float alt = 0, altMAF = 0;;
+String file_name = "bme2.csv";
+float rate = 0;
+unsigned long MAFTimer = 0;
 
 void setup() {
   // Open serial communications and wait for port to open:
@@ -51,11 +61,12 @@ void setup() {
   }
   Serial.println("card initialized.");
   writeHeaders();
-  boolean status = bme.begin();  
-    if (!status) {
-        Serial.println("Could not find a valid BME280 sensor, check wiring!");
-        while (1);
-    }
+  boolean status = bme.begin();
+  if (!status) {
+    Serial.println("Could not find a valid BME280 sensor, check wiring!");
+    while (1);
+  }
+  initMAF();
   pinMode(8, OUTPUT);
   for (int i = 0; i < 2; i++) {
     digitalWrite(8, HIGH);   // turn the LED on (HIGH is the voltage level)
@@ -79,6 +90,10 @@ void writeHeaders() {
     dataFile.print("Altitude (meters)");
     dataFile.print(",");
     dataFile.print("Flight Stage (0-4)");
+    dataFile.print(",");
+    dataFile.print("Filtered Altitude");
+    dataFile.print(",");
+    dataFile.print("Second Derivative");
     dataFile.println(",");
     dataFile.close();
   } else { // if the file isn't open, pop up an error:
@@ -89,30 +104,46 @@ void writeHeaders() {
 void loop() {
   // open the file. note that only one file can be open at a time,
   // so you have to close this one before opening another.
+  unsigned long interval = millis() - MAFTimer;
+  if (interval > 10) {
+    updateInputs(alt);
+    rate = secondDerivative((float)interval);
+    MAFTimer = millis();
+  }
   File dataFile = SD.open(file_name, FILE_WRITE);
   alt = bme.readAltitude(SEALEVELPRESSURE_HPA) - altOffset;
+  updateMAF(alt);
+  altMAF = getMAFAve();
   // if the file is available, write to it:
+  float decision = bmeDecision();
+
+  float timeStamp = millis() - startTime;
   if (dataFile) {
-    dataFile.print(millis() - startTime);
+    dataFile.print(timeStamp);
     dataFile.print(",");
     dataFile.print(alt);
     dataFile.print(",");
-    dataFile.print(bmeDecision());
+    dataFile.print(decision);
+    dataFile.print(",");
+    dataFile.print(altMAF);
+    dataFile.print(",");
+    dataFile.print(rate);
     dataFile.println(",");
     dataFile.close();
     // print to the serial port too:
-    Serial.print(alt);
-    Serial.print(",");
-    Serial.println(bmeDecision());
   } else { // if the file isn't open, pop up an error:
-    //Serial.println("error opening file");
-    Serial.print(millis() - startTime);
-    Serial.print(",");
-    Serial.print(alt);
-    Serial.print(",");
-    Serial.print(bmeDecision());
-    Serial.println(",");
+    Serial.println("error opening file");
   }
+  Serial.print(timeStamp);
+  Serial.print(",");
+  Serial.print(alt);
+  Serial.print(",");
+  Serial.print(decision);
+  Serial.print(",");
+  Serial.print(altMAF);
+  Serial.print(",");
+  Serial.print(rate);
+  Serial.println(",");
   delay(20);
 }
 

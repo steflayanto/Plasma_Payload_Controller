@@ -8,11 +8,11 @@ struct {
 
 void setup() {
   Serial.begin(9600);
-  initFilter();
+  initMAF();
 }
 
 void loop() {
-  updateFilter(sin(millis()/1000));
-  Serial.println(getAve());
+  updateMAF(sin(millis()/1000));
+  Serial.println(getMAFAve());
   delay(1); // change the delay as needed
 }
