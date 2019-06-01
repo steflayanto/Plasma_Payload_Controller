@@ -12,7 +12,7 @@
  const float a5 =  0.00000000000000000006048144;
  const float a6 =  -0.0000000000000000000000007293422;
  const int chipSelect = 4;
- String file_name = "adc.csv";
+ String file_name = "adc.txt";
  unsigned long startTime = 0;
 
 // top to bottom order
@@ -29,6 +29,7 @@ void setup() {
   while(!Serial) {
     ;
   }
+  setupSD();
   adc1.setGain(GAIN_SIXTEEN);
   adc2.setGain(GAIN_SIXTEEN);
   adc3.setGain(GAIN_SIXTEEN);
@@ -87,16 +88,18 @@ void loop() {
   File adcFile = SD.open(file_name, FILE_WRITE);
   if (adcFile) {
     adcFile.print(millis() - startTime);
-    cma(adcFile);
+    adcFile.print(",");
     adcFile.print(S1HF);
-    cma(adcFile);
+    adcFile.print(",");
     adcFile.print(S2HF);
-    cma(adcFile);
+    adcFile.print(",");
     adcFile.print(S3HF);
-    cma(adcFile);
+    adcFile.print(",");
     adcFile.print(S4HF);
+    adcFile.println();
+    adcFile.close();
   } else {
-    Serial.println("bruh");
+    Serial.println("problem writing");
   }
    delay(400);
 
