@@ -29,6 +29,13 @@ struct {
   int index;
 } filter;
 
+#define DATA_STORAGE 20
+struct {
+  float total;
+  float array[DATA_STORAGE];
+  int index;
+}
+
 #define FACTOR 0.2
 #define LOW_BURN 10
 #define LOW_EARLY 20 // equiv HIGH_BURN
