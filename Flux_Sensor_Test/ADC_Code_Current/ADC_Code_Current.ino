@@ -4,13 +4,6 @@
 #include<SPI.h>
 #include<SD.h>
 
- // A0 is 0.0; no need for it
- const float a1 = 0.0025928;
- const float a2 = -0.0000007602961;
- const float a3 = 0.00000000004637791;
- const float a4 = -0.000000000000002165394;
- const float a5 =  0.00000000000000000006048144;
- const float a6 =  -0.0000000000000000000000007293422;
  const int chipSelect = 4;
  String file_name = "adc.txt";
  unsigned long startTime = 0;
@@ -41,38 +34,25 @@ void setup() {
 
 void loop() {
   int16_t S1T, S2T, S3T, S4T, S1HF, S2HF, S3HF, S4HF;
-  float T1, T2, T3, T4;
   
   S1HF = adc1.readADC_Differential_2_3();
   S1T = adc1.readADC_Differential_0_1();
-  T1 = temp(7.8125 * (float) S1T);
-    
+
   S2HF = adc2.readADC_Differential_2_3();
   S2T = adc2.readADC_Differential_0_1();
-  T2 = temp(7.8125 * (float) S2T);
 
   S3HF = adc3.readADC_Differential_2_3();
   S3T = adc3.readADC_Differential_0_1();
-  T3 = temp(7.8125 * (float) S3T);
 
   S4HF = adc4.readADC_Differential_0_1();
   S4T = adc4.readADC_Differential_2_3();
-  T4 = temp(7.8125 * (float) S4T);
   
-  //Serial.print("Sensor 1 Tempurature CAL:");
-  //Serial.println(T1); 
   Serial.print("Sensor 1 Tempurature:");
   Serial.println(S1T); 
-  //Serial.print("Sensor 2 Tempurature CAL:");
-  //Serial.println(T2);
   //Serial.print("Sensor 2 Tempurature:");
   //Serial.println(S2T);
-  //Serial.print("Sensor 3 Tempurature CAL:");
-  //Serial.println(T3);
   //Serial.print("Sensor 3 Tempurature:");
   //Serial.println(S3T);
-  //Serial.print("Sensor 4 Tempurature CAL:");
-  //Serial.println(T4);
   //Serial.print("Sensor 4 Tempurature:");
   //Serial.println(S4T);
 
@@ -96,6 +76,14 @@ void loop() {
     adcFile.print(S3HF);
     adcFile.print(",");
     adcFile.print(S4HF);
+    adcFile.print(",");
+    adcFile.print(S1T);
+    adcFile.print(",");
+    adcFile.print(S2T);
+    adcFile.print(",");
+    adcFile.print(S3T);
+    adcFile.print(",");
+    adcFile.print(S4T);
     adcFile.println();
     adcFile.close();
   } else {
@@ -105,9 +93,6 @@ void loop() {
 
 }
 
-float temp(float t) {
-    return (a1*t) + (a2*pow(t, 2)) + (a3*pow(t, 3)) + (a4*pow(t, 4)) + (a5*pow(t, 5)) + (a6*pow(t, 6));
-}
 
 void setupSD() {
   Serial.print("Initializing SD card..");
