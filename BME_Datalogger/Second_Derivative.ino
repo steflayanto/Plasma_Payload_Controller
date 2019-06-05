@@ -9,12 +9,13 @@ float rightInput = 0, leftInput = 0, centralInput = 0;
     April 21th by Kaiser Sun
 */
 float secondDerivative(float tempInterval) {
-  Serial.print(leftInput);
-  Serial.print('\t');
-  Serial.print(centralInput);
-  Serial.print('\t');
-  Serial.print(rightInput);
-  Serial.println();
+//  Serial.print(leftInput);
+//  Serial.print(", ");
+//  Serial.print(centralInput);
+//  Serial.print(", ");
+//  Serial.print(rightInput);
+//  Serial.print(", ");
+  //Serial.println();
   return (leftInput - (2 * centralInput) + rightInput) / (tempInterval * tempInterval);
 }
 
