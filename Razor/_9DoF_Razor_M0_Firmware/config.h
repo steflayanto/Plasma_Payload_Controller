@@ -24,7 +24,7 @@
 // or LOG_PORT SERIAL_PORT_HARDWARE (SerialUSB or Serial1)
 //#define LOG_PORT SERIAL_PORT_USBVIRTUAL
 #define LOG_PORT SERIAL_PORT_HARDWARE
-#define SERIAL_BAUD_RATE 115200 // Serial port baud
+#define SERIAL_BAUD_RATE 9600 // Serial port baud
 
 ////////////////
 // LED Config //

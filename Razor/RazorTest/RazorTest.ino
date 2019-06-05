@@ -41,14 +41,14 @@ void setup() {
 
   // set the data rate for the SoftwareSerial port
   mySerial.begin(9600);
-  mySerial.write('$');
+  //mySerial.write(' ');
 }
 
 void loop() { // run over and over
   if (mySerial.available()) {
     Serial.write(mySerial.read());
   }
-  if (Serial.available()) {
-    mySerial.write(Serial.read());
-  }
+//  if (Serial.available()) {
+//    mySerial.write(Serial.read());
+//  }
 }

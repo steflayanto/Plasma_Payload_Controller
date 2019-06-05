@@ -128,7 +128,7 @@ void setup()
 
   // For production testing only
   // To catch a "$" and enter testing mode
-  Serial1.begin(9600);
+  //Serial1.begin(9600);
 }
 
 void loop()
