@@ -48,7 +48,7 @@ void setup() {
 void loop() { // run over and over
   if (mySerial.available()) {
     char inByte = mySerial.read();
-    if (inByte == '\n') {
+    if (inByte == '>') {
       Serial.println(readLine);
       
       readLine = "";
