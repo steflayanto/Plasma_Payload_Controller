@@ -18,6 +18,7 @@ TMP102 tempSens(0x48);
 void setup() {
   tempSens.begin();
   Serial.begin(9600);
+  setupSD();
 }
 
 void loop() { 
