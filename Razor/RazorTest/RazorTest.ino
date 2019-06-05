@@ -28,6 +28,7 @@
 #include <SoftwareSerial.h>
 
 SoftwareSerial mySerial(10, 11); // RX, TX
+String readLine = "";
 
 void setup() {
   // Open serial communications and wait for port to open:
@@ -46,9 +47,16 @@ void setup() {
 
 void loop() { // run over and over
   if (mySerial.available()) {
-    Serial.write(mySerial.read());
+    char inByte = mySerial.read();
+    if (inByte == '\n') {
+      Serial.println(readLine);
+      
+      readLine = "";
+    }else{
+      readLine += inByte;
+    }
   }
-//  if (Serial.available()) {
-//    mySerial.write(Serial.read());
-//  }
+  if (Serial.available()) {
+    mySerial.write(Serial.read());
+  }
 }

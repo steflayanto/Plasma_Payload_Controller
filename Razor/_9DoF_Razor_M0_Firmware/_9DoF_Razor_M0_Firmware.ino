@@ -137,7 +137,8 @@ void loop()
   if ( LOG_PORT.available() )
   {
     // If new input is available on serial port
-    parseSerialInput(LOG_PORT.read()); // parse it
+    //parseSerialInput(LOG_PORT.read()); // parse it
+    LOG_PORT.read(); //Do not parse input
   }
 
   // Then check IMU for new data, and log it

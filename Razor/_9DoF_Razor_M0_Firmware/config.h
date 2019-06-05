@@ -48,7 +48,7 @@
 ///////////////////////
 // SD Logging Config //
 ///////////////////////
-#define ENABLE_SD_LOGGING true // Default SD logging (can be changed via serial menu)
+#define ENABLE_SD_LOGGING false // Default SD logging (can be changed via serial menu)
 #define LOG_FILE_INDEX_MAX 999 // Max number of "logXXX.txt" files
 #define LOG_FILE_PREFIX "log"  // Prefix name for log files
 #define LOG_FILE_SUFFIX "txt"  // Suffix name for log files
