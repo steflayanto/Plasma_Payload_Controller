@@ -6,9 +6,9 @@
 #define ENABLE_ACCEL_LOG      true
 #define ENABLE_GYRO_LOG       true
 #define ENABLE_MAG_LOG        true
-#define ENABLE_QUAT_LOG       false
-#define ENABLE_EULER_LOG      false
-#define ENABLE_HEADING_LOG    false
+#define ENABLE_QUAT_LOG       true
+#define ENABLE_EULER_LOG      true
+#define ENABLE_HEADING_LOG    true
 
 ////////////////////////////////////////
 // Enable Non-Volatile Memory Storage //

@@ -168,7 +168,7 @@ void loop()
 
 void logIMUData(void)
 {
-  String imuLog = ""; // Create a fresh line to log
+  String imuLog = "<"; // Create a fresh line to log
   if (enableTimeLog) // If time logging is enabled
   {
     imuLog += String(imu.time) + ", "; // Add time to log string
@@ -249,7 +249,7 @@ void logIMUData(void)
   
   // Remove last comma/space:
   imuLog.remove(imuLog.length() - 2, 2);
-  imuLog += "\r\n"; // Add a new line
+  imuLog += ">"; // Add a new line
 
   if (enableSerialLogging)  // If serial port logging is enabled
     LOG_PORT.print(imuLog); // Print log line to serial port
