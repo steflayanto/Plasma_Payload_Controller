@@ -7,6 +7,7 @@
 Adafruit_LSM9DS0 lsm(1000);
 Adafruit_Simple_AHRS ahrs(&lsm.getAccel(), &lsm.getMag());
 
+#define dangerAng 50.0;
 #define MAF_SIZE 10 // number of samples for the running avg
 struct {
   float total;
@@ -32,7 +33,7 @@ void updateCone() {
     if (ahrs.getOrientation(&orientation)) {
         float heading = pow(pow(orientation.roll, 2) + pow(orientation.pitch, 2)), 1/2)
         updateMAF(heading)
-        if (getMAFAve()) > 50.0) {
+        if (getMAFAve()) > dangerAng) {
             // Shut off
         }
     }
