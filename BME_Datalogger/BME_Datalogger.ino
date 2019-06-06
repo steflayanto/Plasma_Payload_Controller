@@ -44,7 +44,7 @@ const int chipSelect = 4;
 const int altOffset = -14;
 unsigned long startTime = 0;
 float alt = 0, altMAF = 0;;
-String file_name = "bme2.csv";
+String file_name = "2deriv.csv";
 float rate = 0;
 unsigned long MAFTimer = 0;
 
@@ -107,8 +107,8 @@ void loop() {
   // open the file. note that only one file can be open at a time,
   // so you have to close this one before opening another.
   unsigned long interval = millis() - MAFTimer;
-  if (interval > 10) {
-    updateInputs(alt);
+  if (interval > 400) {
+    updateInputs();
     rate = secondDerivative((float)interval);
     MAFTimer = millis();
   }
@@ -116,6 +116,7 @@ void loop() {
   alt = bme.readAltitude(SEALEVELPRESSURE_HPA) - altOffset;
   updateMAF(alt);
   altMAF = getMAFAve();
+  updateStorage(altMAF);
   // if the file is available, write to it:
   float decision = bmeDecision();
 
@@ -146,7 +147,6 @@ void loop() {
   Serial.print(",");
   Serial.print(rate);
   Serial.println(",");
-  delay(20);
 }
 
 float bmeDecision() {

@@ -26,12 +26,14 @@ void updateStorage(float newValue) {
     Error EstimatedL O(dt^3)
 */
 float secondDerivative(float tempInterval) {
-  Serial.print(leftInput);
-  Serial.print('\t');
-  Serial.print(centralInput);
-  Serial.print('\t');
-  Serial.print(rightInput);
-  Serial.println();
+//  Serial.print(secDeriData[0]);
+//  Serial.print('\t');
+//  Serial.print(leftInput);
+//  Serial.print('\t');
+//  Serial.print(centralInput);
+//  Serial.print('\t');
+//  Serial.print(rightInput);
+//  Serial.println();
   return (leftInput - (2 * centralInput) + rightInput) / (tempInterval * tempInterval);
 }
 
