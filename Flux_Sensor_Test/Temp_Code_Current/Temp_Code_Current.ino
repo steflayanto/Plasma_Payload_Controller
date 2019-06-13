@@ -17,15 +17,17 @@ TMP102 tempSens(0x48);
 
 void setup() {
   tempSens.begin();
-  Serial.begin(9600);
-  setupSD();
+  Serial.begin(115200);
+  while(!Serial);
+  //setupSD();
+  Serial.println("Starting");
 }
 
 void loop() { 
-  float Tempurature;
-  Tempurature = tempSens.readTempF();
-  Serial.println(Tempurature);
-  
+  float Temperature;
+  Temperature = tempSens.readTempF();
+  Serial.println(Temperature);
+  /*
   File tempFile = SD.open(file_name, FILE_WRITE);
   if (tempFile) {
     tempFile.print(millis() - startTime);
@@ -35,7 +37,7 @@ void loop() {
     tempFile.close();
   } else {
     Serial.println("problem writing");
-  }
+  }*/
    delay(400);
 
 }

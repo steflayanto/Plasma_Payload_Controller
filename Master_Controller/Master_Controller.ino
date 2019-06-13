@@ -10,8 +10,8 @@ void setup() {
 }
 
 void loop() {
-  updateSensors();
-  transmitToLogger();
+  updateTrackedValues(); //Updates the values that are relevant to the decision algorithm
+  transmitToLogger();    //Directly reads and sends all sensor data to serial monitor. Some unnecessary reads.
   weightedFlightStage = decisionAlgorithm();
   if (activated) {
     return; //if already running, don't do anything below
@@ -27,21 +27,21 @@ void loop() {
 void initSensors() {
   initLSM();
   initBME();
-}
-
-//Performs all sensor updates
-void updateSensors() {
-  updateLSM();
-  updateBME();  
+  initTempSens();
 }
 
 //Interacts with slave logger device
 void transmitToLogger() {
-  
+  Serial.println("Transmitting to logger");
 }
 
 //Decides whether to activate plasma (Stefan, Lexie, & Usman)
 boolean checkTriggerConditions() {
   //Code will consider sensor data and flight stage and make a decision
   return true;
+}
+
+// Utility float map function with 3 digits precision. includes constrain
+float mapFloat(float val, float inLo, float inHi, float outLo, float outHi) { 
+  return map(constrain(val, inLo, inHi) * 1000, inLo * 1000, inHi * 1000, outLo * 1000, outHi * 1000) / 1000.0;
 }

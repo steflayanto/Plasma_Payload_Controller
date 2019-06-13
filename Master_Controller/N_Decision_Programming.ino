@@ -3,6 +3,9 @@ short timerStage = 0;
 unsigned long launchTime;
 boolean launched;
 
+float alt = 0, altMAF = 0;;
+unsigned long MAFTimer = 0;
+
 boolean decisionAlgorithm() {
   timerStage = timerUpdate();
   weightedFlightStage = combinedSensorWeight();
@@ -54,16 +57,16 @@ float imuTrigger() {
 }
 
 float baroTrigger() {
-  return 1;
+  return bmeDecision();
 }
 
 float accelTrigger() {
   return 1;
 }
 
-//  }else if (timerStage == 1) { //engine-burn: all must trigger
-//    return primaryTrigger() && imuTrigger() && baroTrigger() && accelTrigger();
-//  }else if (timerStage == 2) { //early-coast-phase: primary triggers, or 2/3 secondary sensors trigger
-//    return primaryTrigger() || ((int) imuTrigger() + (int) baroTrigger() + (int) accelTrigger() > 1);
-//  }else if (timerStage == 3) { //late-coast-phase: any sensors can trigger
-//    return primaryTrigger() || imuTrigger() || baroTrigger() || accelTrigger();
+void updateTrackedValues() {
+  //BME
+  alt = BMEalt();
+  updateMAF(alt);
+  altMAF = getMAFAve();
+}

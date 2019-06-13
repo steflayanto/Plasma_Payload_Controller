@@ -1,6 +1,7 @@
-//Global variables 
-float btemp, pressure, alt, hum; //BME
-float accelX, accelY, accelZ, magX, magY, magZ, gyroX, gyroY, gyroZ, ltemp; //LSM
+void initTempSens() {
+  tempSens.begin();
+  Serial.print("TempSensor Initialized");
+}
 
 // SETUP Code
 void initLSM() {
@@ -30,73 +31,48 @@ void initLSM() {
   //lsm.setupGyro(lsm.LSM9DS0_GYROSCALE_2000DPS);
 }
 
-void initBME() {
-  //in setup
-  //Serial.begin(9600);
-  Serial.println(F("BME280 test"));
 
-  bool status;
 
-  bmstatus = bme.begin();
-  if (!status) {
-    Serial.println("Could not find a valid BME280 sensor, check wiring!");
-    while (1);
-  }
-
-}
-
-float BMEtemp() {
-  btemp = bme.readTemperature();
-}
-
-float BMEpressure() {
-  pressure = bme.readPressure() / 100.0F; //hPa
-}
-
-float BMEalt() {
-  alt = bme.readAltitude(SEALEVELPRESSURE_HPA);
-}
-
-float BMEhum() {
-  hum = bme.readHumidity();
+float tempSensTemp() {
+  return tempSens.readTempF();
 }
 
 float LSMaccelX() {
-  accelX = lsm.accelData.x;
+  return lsm.accelData.x;
 }
 
 float LSMaccelY() {
-  accelY = lsm.accelData.y;
+  return  lsm.accelData.y;
 }
 
 float LSMaccelZ() {
-  accelZ = lsm.accelData.z;
+  return lsm.accelData.z;
 }
 
 float LSMmagX() {
-  magX = lsm.magData.x;
+  return lsm.magData.x;
 }
 
 float LSMmagY() {
-  magY = lsm.magData.y;
+  return lsm.magData.y;
 }
 
 float LSMmagZ() {
-  magZ = lsm.magData.z;
+  return lsm.magData.z;
 }
 
 float LSMgyroX() {
-  gyroX = lsm.gyroData.x;
+  return lsm.gyroData.x;
 }
 
 float LSMgyroY() {
-  gyroY = lsm.gyroData.Y;
+  return lsm.gyroData.y;
 }
 
 float LSMgyroZ() {
-  gyroZ = lsm.gyroData.Z;
+  return lsm.gyroData.z;
 }
 
 float LSMtemp(){
-  ltemp = lsm.temperature;
+  return lsm.temperature;
 }
