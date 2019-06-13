@@ -29,7 +29,7 @@ struct {
   int index;
 } filter;
 
-#define FACTOR 0.2f
+#define FACTOR 0.2
 #define LOW_BURN 10
 #define LOW_EARLY 20 // equiv HIGH_BURN
 #define LOW_LATE 30  // equiv HIGH_EARLY
@@ -41,8 +41,8 @@ Adafruit_BME280 bme; // I2C
 const int chipSelect = 4;
 const int altOffset = -14;
 unsigned long startTime = 0;
-float alt = 0, altMAF = 0;
-String file_name = "bme2.csv";
+float alt = 0, altMAF = 0;;
+String file_name = "2deriv.csv";
 float rate = 0;
 unsigned long MAFTimer = 0;
 
@@ -105,10 +105,10 @@ void loop() {
   // open the file. note that only one file can be open at a time,
   // so you have to close this one before opening another.
   unsigned long interval = millis() - MAFTimer;
-  if (interval > 100) {
-    updateInputs(altMAF);
-    rate = secondDerivative((float)interval/1000);
-    Serial.println(rate);
+
+  if (interval > 400) {
+    updateInputs();
+    rate = secondDerivative((float)interval);
     MAFTimer = millis();
   }
   
@@ -116,6 +116,7 @@ void loop() {
   alt = bme.readAltitude(SEALEVELPRESSURE_HPA) - altOffset;
   updateMAF(alt);
   altMAF = getMAFAve();
+  updateStorage(altMAF);
   // if the file is available, write to it:
   float decision = bmeDecision();
 
@@ -136,17 +137,16 @@ void loop() {
   } else { // if the file isn't open, pop up an error:
     //Serial.println("error opening file");
   }
-//  Serial.print(timeStamp);
-//  Serial.print(",");
-//  Serial.print(alt);
-//  Serial.print(",");
-//  Serial.print(decision);
-//  Serial.print(",");
-//  Serial.print(altMAF);
-//  Serial.print(",");
-//  Serial.print(rate);
-//  Serial.println(",");
-  delay(20);
+  Serial.print(timeStamp);
+  Serial.print(",");
+  Serial.print(alt);
+  Serial.print(",");
+  Serial.print(decision);
+  Serial.print(",");
+  Serial.print(altMAF);
+  Serial.print(",");
+  Serial.print(rate);
+  Serial.println(",");
 }
 
 float bmeDecision() {
