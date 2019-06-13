@@ -26,9 +26,15 @@
 
  */
 #include <SoftwareSerial.h>
+// <>
 
-SoftwareSerial mySerial(10, 11); // RX, TX
+// unsigned long time;
+// float ax, ay, az, gyrox, gyroy, gyroz, magx, magy, magz, criw, crix, criy, criz, eulerpitch, eulerr, eulery, compassh;
+float dataset[18];
+
+SoftwareSerial imuSerial(10, 11); // RX, TX
 String readLine = "";
+#define LENGTH = 160;
 
 void setup() {
   // Open serial communications and wait for port to open:
@@ -41,22 +47,69 @@ void setup() {
   Serial.println("Goodnight moon!");
 
   // set the data rate for the SoftwareSerial port
-  mySerial.begin(9600);
+  imuSerial.begin(9600);
   //mySerial.write(' ');
 }
 
-void loop() { // run over and over
-  if (mySerial.available()) {
-    char inByte = mySerial.read();
-    if (inByte == '>') {
-      Serial.println(readLine);
-      
-      readLine = "";
-    }else{
-      readLine += inByte;
+char dataInput[160];
+void parse() {
+    Serial.println("Entered the parse");
+    dataset[0] = atof(strtok(dataInput, ","));
+    for(int i = 1; i < 18; i ++) {
+      dataset[i] = atof(strtok(NULL, ","));
+    }
+}
+
+int index = 0;
+char incoming;
+void updateData() {
+  Serial.print("Enter UpdateData");
+  if(imuSerial.available()) {
+    incoming = imuSerial.read();
+    if(incoming == '>') {
+      Serial.print("Into Parse");
+      index = 0;
+      parse();
+    } else {
+      //Serial.print("Enter update");
+      Serial.print(incoming);
+      dataInput[index] = incoming;
+      index ++;
+      updateData();
     }
   }
-  if (Serial.available()) {
-    mySerial.write(Serial.read());
+}
+void loop() { // run over and over
+  // if (imuSerial.available()) {
+  //   char inByte = imuSerial.read();
+  //   if (inByte == '>') {
+  //     if(true){//l < readLine.length()) {
+  //       l = readLine.length();
+  //     }
+  //     Serial.println(l);
+      
+  //     readLine = "";
+  //   }else{
+  //     readLine += inByte;
+  //   }
+  // }
+  // if (Serial.available()) {
+  //   imuSerial.write(Serial.read());
+  // }
+  if(imuSerial.available()) {
+    if(imuSerial.read() == '<') {
+      updateData();
+      printData();
+    }
   }
+  // communications();
+}
+
+void printData() {
+  for(int i = 0; i < 18; i ++) {
+    Serial.print(dataset[i]);
+    Serial.print(",");
+  }
+  Serial.print("\n");
+  return;
 }
