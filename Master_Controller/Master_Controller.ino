@@ -11,7 +11,7 @@ void setup() {
 
 void loop() {
   updateTrackedValues(); //Updates the values that are relevant to the decision algorithm
-  transmitToLogger();    //Directly reads and sends all sensor data to serial monitor. Some unnecessary reads.
+  //transmitToLogger();    //Directly reads and sends all sensor data to serial monitor. Some unnecessary reads.
   weightedFlightStage = decisionAlgorithm();
   if (activated) {
     return; //if already running, don't do anything below
@@ -32,6 +32,9 @@ void initSensors() {
 
 //Interacts with slave logger device
 void transmitToLogger() {
+  printLSMData();
+  printBMEData();
+  printTempSensData();
   Serial.println("Transmitting to logger");
 }
 
@@ -44,4 +47,14 @@ boolean checkTriggerConditions() {
 // Utility float map function with 3 digits precision. includes constrain
 float mapFloat(float val, float inLo, float inHi, float outLo, float outHi) { 
   return map(constrain(val, inLo, inHi) * 1000, inLo * 1000, inHi * 1000, outLo * 1000, outHi * 1000) / 1000.0;
+}
+
+void updateTrackedValues() {
+  //BME
+  alt = BMEalt();
+  updateBMEMAF(alt);
+  altMAF = getBMEMAFAve();
+
+  //LSM
+  lsm.getEvent(&accel, &mag, &gyro, &temp); 
 }

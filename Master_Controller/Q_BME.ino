@@ -15,7 +15,7 @@ void initBME() {
     Serial.println("Could not find a valid BME280 sensor, check wiring!");
     while (1);
   }
-  initMAF();
+  initBMEMAF();
 }
 
 float bmeDecision() {
@@ -58,23 +58,23 @@ float BMEhum() {
 
 //MAF (Moving Average Filter) FUNCTIONS
 // Initializes filter struct
-void initMAF() {
-  filter.total = 0;
+void initBMEMAF() {
+  BMEfilter.total = 0;
   for (int i = 0; i < MAF_SIZE; i++) {
-    filter.arr[i] = 0;
+    BMEfilter.arr[i] = 0;
   }
-  filter.index = 0;
+  BMEfilter.index = 0;
 }
 
 // Updates MAF with a new value
-void updateMAF(float newValue) {
-  filter.total -= filter.arr[filter.index];
-  filter.arr[filter.index] = newValue;
-  filter.total += filter.arr[filter.index];
-  filter.index = (filter.index + 1) % MAF_SIZE;
+void updateBMEMAF(float newValue) {
+  BMEfilter.total -= BMEfilter.arr[BMEfilter.index];
+  BMEfilter.arr[BMEfilter.index] = newValue;
+  BMEfilter.total += BMEfilter.arr[BMEfilter.index];
+  BMEfilter.index = (BMEfilter.index + 1) % MAF_SIZE;
 }
 
 // Returns current average of filter as output
-float getMAFAve() {
-  return filter.total / MAF_SIZE; // input for second derivative function
+float getBMEMAFAve() {
+  return BMEfilter.total / MAF_SIZE; // input for second derivative function
 }

@@ -13,11 +13,11 @@ void initLSM() {
   Serial.println("Success.");
 
   // 1.) Set the accelerometer range
-  lsm.setupAccel(lsm.LSM9DS0_ACCELRANGE_2G);
+  //lsm.setupAccel(lsm.LSM9DS0_ACCELRANGE_2G);
   //lsm.setupAccel(lsm.LSM9DS0_ACCELRANGE_4G);
   //lsm.setupAccel(lsm.LSM9DS0_ACCELRANGE_6G);
   //lsm.setupAccel(lsm.LSM9DS0_ACCELRANGE_8G);
-  //lsm.setupAccel(lsm.LSM9DS0_ACCELRANGE_16G);
+  lsm.setupAccel(lsm.LSM9DS0_ACCELRANGE_16G);
 
   // 2.) Set the magnetometer sensitivity
   lsm.setupMag(lsm.LSM9DS0_MAGGAIN_2GAUSS);
@@ -38,45 +38,41 @@ float tempSensTemp() {
 }
 
 float LSMaccelX() {
-  return lsm.accelData.x;
+  return accel.acceleration.x;
 }
 
 float LSMaccelY() {
-  return  lsm.accelData.y;
+  return accel.acceleration.y;
 }
 
 float LSMaccelZ() {
-  return lsm.accelData.z;
+  return accel.acceleration.z;
 }
 
 float LSMmagX() {
-  return lsm.magData.x;
+  return mag.magnetic.x;
 }
 
 float LSMmagY() {
-  return lsm.magData.y;
+  return mag.magnetic.y;
 }
 
 float LSMmagZ() {
-  return lsm.magData.z;
+  return mag.magnetic.z;
 }
 
 float LSMgyroX() {
-  return lsm.gyroData.x;
+  return gyro.gyro.x;
 }
 
 float LSMgyroY() {
-  return lsm.gyroData.y;
+  return gyro.gyro.y;
 }
 
 float LSMgyroZ() {
-  return lsm.gyroData.z;
+  return gyro.gyro.z;
 }
 
 float LSMtemp(){
-  return lsm.temperature;
-}
-
-int readCircuitVoltage() {
-  return analogRead(A0 * 3.3 / 1023);
+  return temp.temperature;
 }

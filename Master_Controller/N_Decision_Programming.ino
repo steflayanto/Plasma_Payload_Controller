@@ -3,7 +3,6 @@ short timerStage = 0;
 unsigned long launchTime;
 boolean launched;
 
-float alt = 0, altMAF = 0;;
 unsigned long MAFTimer = 0;
 
 boolean decisionAlgorithm() {
@@ -57,16 +56,13 @@ float imuTrigger() {
 }
 
 float baroTrigger() {
-  return bmeDecision();
+  float out = bmeDecision();
+  Serial.print(getBMEMAFAve());
+  Serial.print("\t");
+  Serial.println(out);
+  return out;
 }
 
 float accelTrigger() {
   return 1;
-}
-
-void updateTrackedValues() {
-  //BME
-  alt = BMEalt();
-  updateMAF(alt);
-  altMAF = getMAFAve();
 }
