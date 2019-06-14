@@ -77,6 +77,6 @@ float LSMtemp(){
   return lsm.temperature;
 }
 
-int readCircuit() {
-  return analogRead(A0);
+int readCircuitVoltage() {
+  return analogRead(A0 * 3.3 / 1023);
 }
