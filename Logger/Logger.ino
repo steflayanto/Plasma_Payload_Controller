@@ -9,6 +9,7 @@
 int fileCount = 0;
 unsigned long fileCountTimer = 0;
 unsigned long frequency = 10000; //new file every 10 seconds (10,000ms)
+String inputData = "";
 
 //ADC data
 int16_t S1T, S2T, S3T, S4T, S1HF, S2HF, S3HF, S4HF;
@@ -22,8 +23,9 @@ void setup() {
 #ifndef ESP8266
   while (!Serial);     // For running on ESP boards. Will pause until serial console opens
 #endif
-  Serial.begin(116200);
+  Serial.begin(115200);
   Serial.print("Initializing SD card...");  // see if the card is present and can be initialized:
+  Serial1.begin(57600);
   if (!SD.begin(CHIP_SELECT)) {
     Serial.println("Card failed, or not present");
     while (1 && WRITE);
@@ -33,6 +35,15 @@ void setup() {
 }
 
 void loop() {
+  if (Serial1.available()) {
+    int inChar = Serial1.read();
+    if (inChar != '\n') {
+      inputData += (char)inChar;
+    }else{
+      Serial.print(inputData);
+      inputData = "";
+    }
+  }
   readSensors();
   //printADCs();
   String dataString = formatData();
@@ -51,7 +62,7 @@ void loop() {
       Serial.println("error opening " + fileName());
     }
   }
-  Serial.println(dataString);
+  //Serial.println(dataString);
 }
 
 String fileName() {
@@ -64,7 +75,7 @@ String formatData() {
     + String(S3HF) + "," + String(S3T) + "," 
     + String(S4HF) + "," + String(S4T) + ",";
   String tempSens = String(getCircuitVoltage()) + ",";
-  return ADCs + tempSens;
+  return ADCs + tempSens;// + inputString;
 }
 
 void initSensors() {
