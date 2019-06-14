@@ -12,13 +12,13 @@ struct {
   float total;
   float arr[MAF_SIZE];
   int index;
-} filter;
+} coneFilter;
 
 Adafruit_LSM9DS0 lsm(1000);
 Adafruit_Simple_AHRS ahrs(&lsm.getAccel(), &lsm.getMag());
 
-double dangerAng = 33.0; // Highly arbitrary value
-boolean safe = false;;
+double dangerAngle = 33.0; // Highly arbitrary value
+boolean safe = false;
 
 void setup() {
   Serial.begin(115200);
@@ -44,7 +44,7 @@ void initCone() {
   lsm.setupAccel(lsm.LSM9DS0_ACCELRANGE_2G);
   lsm.setupMag(lsm.LSM9DS0_MAGGAIN_2GAUSS);
   lsm.setupGyro(lsm.LSM9DS0_GYROSCALE_245DPS);
-  initMAF();
+  initConeMAF();
 }
 
 // Adds 180 to an euler value, and wraps to +-180. Assumes input is within +-180
@@ -64,19 +64,19 @@ void updateCone() {
     double pitchSq = pow(orientation.pitch, 2.0);
     double tot = rollSq + pitchSq;
     double heading = pow(tot, 0.5);
-    updateMAF(heading);
-//    Serial.print(invert(orientation.roll));
-//    Serial.print(",");
-//    Serial.print(orientation.pitch);
-//    Serial.print(",");
-//    Serial.print(heading);
-//    Serial.println();
-    if (getMAFAve() > dangerAng) {
+    updateConeMAF(heading);
+    if (getConeMAFAve() > dangerAngle) {
       safe = false;
       digitalWrite(13, HIGH);
     } else {
       safe = true;
       digitalWrite(13, LOW);
     }
+//    Serial.print(invert(orientation.roll));
+//    Serial.print(",");
+//    Serial.print(orientation.pitch);
+//    Serial.print(",");
+//    Serial.print(heading);
+//    Serial.println();
   }
 }

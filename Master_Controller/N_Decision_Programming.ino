@@ -1,7 +1,7 @@
 // Contains code that goes into comparing sensor values and making decision.
-short timerStage = 0;
+int timerStage = 0;
 unsigned long launchTime;
-boolean launched;
+boolean launched = false;
 
 unsigned long MAFTimer = 0;
 
@@ -10,7 +10,7 @@ boolean decisionAlgorithm() {
   weightedFlightStage = combinedSensorWeight();
   if (timerStage == 0) { //Pre-launch
     return false;
-  }else if (timerStage == 4) { //descent: just trigger if still hasn't
+  }else if (timerStage == 4) { //descent: don't trigger if still hasn't
     return false;
   }else{
     return weightedFlightStage >= 2;
@@ -20,14 +20,18 @@ boolean decisionAlgorithm() {
 //replace center if else with a weighted average where timer is one of the contributing factors.
 //keep timer as bookends
 
-short checkForLaunch() {
-  launchTime = millis();
-  return 1;
+boolean checkForLaunch() {
+  if (round(weightedFlightStage) >= 1) {
+    launched = true;
+    return true;
+  }
+  return false;
 }
 
-short timerUpdate() {
+int timerUpdate() {
   if (timerStage == 0) {
-    return checkForLaunch();
+    checkForLaunch();
+    return 0;
   }
   unsigned long currTime = millis() - launchTime;
   if (currTime > LATE_COAST_TIME) {
@@ -42,8 +46,11 @@ short timerUpdate() {
 }
 
 float combinedSensorWeight() {
-  float wt[] = {0.5, 0.1, 0.1, 0.1, 0.2}; // Primary, imu, baro, accel, timer respectively
-  return wt[0] * primaryTrigger() + wt[1] * imuTrigger() + wt[2] * baroTrigger() + wt[3] * accelTrigger() + wt[4] * timerStage;
+  float wt[] = {0.0, 0.5, 0.4,0.1}; // Primary, imu, baro, accel, timer respectively
+  float out = (wt[0] * primaryTrigger()) + (wt[1] * imuTrigger()) + (wt[2] * baroTrigger()) + (wt[3] * timerStage);
+//  Serial.print("Combined val: ");
+//  Serial.println(out);
+  return out;
 }
 
 //Rename to be actual parameters detected (constant acceleration)
@@ -52,17 +59,19 @@ float primaryTrigger() {
 }
 
 float imuTrigger() {
-  return 1;
+  if (launched) {
+    updateMaxDrag(LSMaccelZ());
+  }
+  float out = imuDecision(LSMaccelZ());
+//  Serial.print("IMU Out: ");
+//  Serial.println(out);
+  return out;
 }
 
 float baroTrigger() {
   float out = bmeDecision();
-  Serial.print(getBMEMAFAve());
-  Serial.print("\t");
-  Serial.println(out);
+//  Serial.print(getBMEMAFAve());
+//  Serial.print("Baro Out: ");
+//  Serial.println(out);
   return out;
-}
-
-float accelTrigger() {
-  return 1;
 }

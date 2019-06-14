@@ -15,7 +15,7 @@
    12
    13
    A0
-   A1
+   A1 Kyle's Circuit Input
    A2
    A3
    A4
@@ -34,13 +34,7 @@
 #define Serial SERIAL_PORT_USBVIRTUAL
 #endif
 
-#define OTHER PIN_NAME 2
 #define RELAY_PIN 10                //this means before compiling, find RELAY replace with 10
-
-//Time Estimates (cumulative duration)
-#define LATE_COAST_TIME 0
-#define EARLY_COAST_TIME 0
-#define ENGINE_BURN_TIME 0
 
 //This constant and struct are all that is needed for the MAF
 #define MAF_SIZE 5 // number of samples for the running avg
@@ -68,19 +62,30 @@ float weightedFlightStage = 0;      // Stores expected flight stage:
 */
 
 float alt = 0, altMAF = 0;
+boolean inCone = false; //Whether inside the danger cone or not
 
 
 //Sensor Objects
 Adafruit_LSM9DS0 lsm = Adafruit_LSM9DS0(1000);
+Adafruit_Simple_AHRS ahrs(&lsm.getAccel(), &lsm.getMag());
 Adafruit_BME280 bme; // I2C
 TMP102 tempSens(0x48);
+
+//Danger Cone
+double dangerAngle = 33.0; // Highly arbitrary value in degrees
+
+//Time Estimates (cumulative duration)
+#define LATE_COAST_TIME 0
+#define EARLY_COAST_TIME 0
+#define ENGINE_BURN_TIME 0
 
 //LSM Data Objects
 sensors_event_t accel, mag, gyro, temp;
 
 //BME
-#define BME_SCK 13
-#define BME_MISO 12
-#define BME_MOSI 11
-#define BME_CS 10
+#define FACTOR 0.2f
+#define LOW_BURN 10
+#define LOW_EARLY 20 // equiv HIGH_BURN
+#define LOW_LATE 30  // equiv HIGH_EARLY
+#define HIGH_LATE 50
 #define ALT_OFFSET -1401 // Based on elevation of spaceport america (1.401 km)

@@ -7,12 +7,14 @@ void setup() {
   Serial.begin(116200);
   initSensors();
   relayInit();
+  initConeMAF();
 }
 
 void loop() {
   updateTrackedValues(); //Updates the values that are relevant to the decision algorithm
   //transmitToLogger();    //Directly reads and sends all sensor data to serial monitor. Some unnecessary reads.
-  weightedFlightStage = decisionAlgorithm();
+  printFlightParameters();
+  Serial.println();
   if (activated) {
     return; //if already running, don't do anything below
   }
@@ -41,7 +43,7 @@ void transmitToLogger() {
 //Decides whether to activate plasma (Stefan, Lexie, & Usman)
 boolean checkTriggerConditions() {
   //Code will consider sensor data and flight stage and make a decision
-  return true;
+  return decisionAlgorithm() && inCone;
 }
 
 // Utility float map function with 3 digits precision. includes constrain
@@ -50,11 +52,14 @@ float mapFloat(float val, float inLo, float inHi, float outLo, float outHi) {
 }
 
 void updateTrackedValues() {
+  //Safety Cone
+  updateCone();
+  
   //BME
   alt = BMEalt();
   updateBMEMAF(alt);
   altMAF = getBMEMAFAve();
 
   //LSM
-  lsm.getEvent(&accel, &mag, &gyro, &temp); 
+  lsm.getEvent(&accel, &mag, &gyro, &temp);
 }

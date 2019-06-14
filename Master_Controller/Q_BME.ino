@@ -1,8 +1,4 @@
-#define FACTOR 0.2f
-#define LOW_BURN 10
-#define LOW_EARLY 20 // equiv HIGH_BURN
-#define LOW_LATE 30  // equiv HIGH_EARLY
-#define HIGH_LATE 50
+//Lexie Chau
 
 #define SEALEVELPRESSURE_HPA (1013.25)
 

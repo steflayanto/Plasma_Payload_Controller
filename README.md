@@ -8,3 +8,7 @@ Microcontroller for SARP UW's experimental plasma actuator payload. Tasked with 
  - <SparkFunTMP102.h>
  - <Adafruit_Simple_AHRS.h>
  - <Adafruit_ADS1015.h>
+
+# Required Boards (in Arduino IDE)
+ - Arduino SAMD
+ - Adafruit SAMD

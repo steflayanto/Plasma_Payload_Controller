@@ -212,7 +212,6 @@ void updateMaxDrag(float zAccel) {
 }
 
 
-
 //the main part of the program
 //this algorithm determines the rocket's flight stage based on the z-acceleration reading from the IMU
 float flightStageDecision(float zAccel) {

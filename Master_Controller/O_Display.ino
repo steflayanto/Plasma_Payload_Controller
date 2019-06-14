@@ -1,3 +1,14 @@
+void printFlightParameters() {
+  Serial.print(weightedFlightStage); Serial.print(",");
+  Serial.print(primaryTrigger()); Serial.print(",");
+  Serial.print(imuTrigger()); Serial.print(",");
+  Serial.print(baroTrigger()); Serial.print(",");
+  Serial.print(timerStage); Serial.print(",");
+  Serial.print(decisionAlgorithm()); Serial.print(",");
+  Serial.print(activated); Serial.print(",");
+  Serial.print(inCone); Serial.print(",");
+}
+
 void printLSMData() {
   Serial.print(LSMaccelX()); Serial.print(","); 
   Serial.print(LSMaccelY()); Serial.print(","); 
