@@ -18,8 +18,11 @@ Adafruit_LSM9DS0 lsm(1000);
 Adafruit_Simple_AHRS ahrs(&lsm.getAccel(), &lsm.getMag());
 
 double dangerAng = 33.0; // Highly arbitrary value
+boolean safe = false;;
+
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
+  while(!Serial);
   initCone();
 }
 
@@ -33,7 +36,10 @@ void loop() {
 void initCone() {
   //initLSM();
   if(!lsm.begin()) {
-    Serial.println("shit");
+    Serial.println("LSM not found");
+    while(1) {
+      Serial.println("error");
+    }
   }
   lsm.setupAccel(lsm.LSM9DS0_ACCELRANGE_2G);
   lsm.setupMag(lsm.LSM9DS0_MAGGAIN_2GAUSS);
@@ -41,19 +47,35 @@ void initCone() {
   initMAF();
 }
 
+// Adds 180 to an euler value, and wraps to +-180. Assumes input is within +-180
+double invert(double input) {
+  if (input >= 0) {
+    return input - 180;
+  }else{ //if less than 0
+    return input + 180;
+  }
+}
+
 void updateCone() {
   sensors_vec_t orientation;
   if (ahrs.getOrientation(&orientation)) {
-    double rollSq = pow(orientation.roll, 2.0);
+    
+    double rollSq = pow(invert(orientation.roll), 2.0);
     double pitchSq = pow(orientation.pitch, 2.0);
     double tot = rollSq + pitchSq;
     double heading = pow(tot, 0.5);
-    updateMAF(abs(180 - heading));
-    Serial.print(abs(180 - heading));
-    Serial.println();
+    updateMAF(heading);
+//    Serial.print(invert(orientation.roll));
+//    Serial.print(",");
+//    Serial.print(orientation.pitch);
+//    Serial.print(",");
+//    Serial.print(heading);
+//    Serial.println();
     if (getMAFAve() > dangerAng) {
+      safe = false;
       digitalWrite(13, HIGH);
     } else {
+      safe = true;
       digitalWrite(13, LOW);
     }
   }
