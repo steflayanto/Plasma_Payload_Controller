@@ -76,3 +76,7 @@ float LSMgyroZ() {
 float LSMtemp(){
   return lsm.temperature;
 }
+
+int readCircuit() {
+  return analogRead(A0);
+}
