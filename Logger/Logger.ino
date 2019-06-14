@@ -2,11 +2,9 @@
 #include <SD.h>
 #include <Wire.h>
 #include <Adafruit_ADS1015.h>
-#include <SparkFunTMP102.h>
-
 
 #define CHIP_SELECT 4
-#define WRITE false
+#define WRITE false //CHANGE BEFORE FLIGHT
 
 int fileCount = 0;
 unsigned long fileCountTimer = 0;
@@ -37,7 +35,7 @@ void setup() {
 void loop() {
   readSensors();
   //printADCs();
-  unsigned long dataString = millis();
+  String dataString = formatData();
   if (WRITE) {
     if (millis() - fileCountTimer >= frequency) {
       fileCountTimer = millis();
@@ -53,10 +51,20 @@ void loop() {
       Serial.println("error opening " + fileName());
     }
   }
+  Serial.println(dataString);
 }
 
 String fileName() {
   return "log" + String(fileCount) + ".csv";
+}
+
+String formatData() {
+  String ADCs = String(S1HF) + "," + String(S1T) + ","
+    + String(S2HF) + "," + String(S2T) + "," 
+    + String(S3HF) + "," + String(S3T) + "," 
+    + String(S4HF) + "," + String(S4T) + ",";
+  String tempSens = String(getCircuitVoltage()) + ",";
+  return ADCs + tempSens;
 }
 
 void initSensors() {
@@ -86,14 +94,19 @@ void readSensors() {
   S4T = adc4.readADC_Differential_2_3();
 }
 
+
+int getCircuitVoltage() {
+  return (analogRead(A1) * 3.3) / 4095.0;
+}
+
 void printADCs() {
-  Serial.print(F("Sensor 1 Tempurature:"));
+  Serial.print(F("Sensor 1 Temperature:"));
   Serial.println(S1T);
-  Serial.print("Sensor 2 Tempurature:");
+  Serial.print("Sensor 2 Temperature:");
   Serial.println(S2T);
-  Serial.print("Sensor 3 Tempurature:");
+  Serial.print("Sensor 3 Temperature:");
   Serial.println(S3T);
-  Serial.print("Sensor 4 Tempurature:");
+  Serial.print("Sensor 4 Temperature:");
   Serial.println(S4T);
 
   Serial.print(F("Sensor 1 Heat Flux:"));
