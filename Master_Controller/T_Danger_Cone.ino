@@ -9,10 +9,14 @@ void updateCone() {
     updateConeMAF(heading);
     if (getConeMAFAve() > dangerAngle) {
       inCone = false;
-      digitalWrite(13, HIGH);
+      digitalWrite(13, LOW);
     } else {
       inCone = true;
-      digitalWrite(13, LOW);
+      if (millis() % BUZZER_INTERVAL < 500) {
+        digitalWrite(13, HIGH);
+      }else{
+        digitalWrite(13,LOW);
+      }
     }
 //    Serial.print(invert(orientation.roll));
 //    Serial.print(",");

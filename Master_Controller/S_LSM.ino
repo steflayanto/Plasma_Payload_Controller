@@ -1,6 +1,6 @@
 //Adam Norgaard
 double maxDrag = 0;
-const float noiseBuffer = 1.0; //arbitrary value for now
+
 
 //updating the maximum drag value all flight
 void updateMaxDrag(float zAccel) {
@@ -12,16 +12,16 @@ void updateMaxDrag(float zAccel) {
 //the main part of the program
 //this algorithm determines the rocket's flight stage based on the z-acceleration reading from the IMU
 float imuDecision(float zAccel) {
-  float flightStage = 2;
+  float flightStage = 0;
   if (zAccel >= -9.81 - noiseBuffer && zAccel <= -9.81 + noiseBuffer) { //force of gravity //buffer is included due to possibly noise in LSM readings
     flightStage = 0; //pre-launch, do not activate at all
   } else if (zAccel < -9.81) { // force of gravity plus engine thrust
     flightStage = 1; // burn
-  } else if (zAccel >= 0 && zAccel > maxDrag / 2) { //force of drag
+  } else if (zAccel >= 0 && zAccel > maxDrag / 2 && inCone) { //force of drag     //ADDED IN CONE REQUIREMENT
     flightStage = 2; //early-coast, this is when we want to activate the plasma
-  } else if (zAccel <= maxDrag / 2 && zAccel != 0) { //force of drag, but less drag than before
+  } else if (zAccel <= maxDrag / 2 && zAccel != 0 && inCone) { //force of drag, but less drag than before //ADDED IN CONE REQUIREMENT
     flightStage = 3; //late-coast, if plasma isn't activated yet then activate it now
-  } else if (zAccel >= -noiseBuffer && zAccel <= noiseBuffer) { //feels zero Gs in free fall; same noiseBuffer as pre-launch,
+  } else if (zAccel >= -noiseBuffer && zAccel <= noiseBuffer && inCone) { //feels zero Gs in free fall; same noiseBuffer as pre-launch,
     //maybe the buffer value should be different?
     flightStage = 4; //descent, do not activate at all
   }

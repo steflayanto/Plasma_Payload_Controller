@@ -17,9 +17,11 @@ void trigger(int duration, int pin) {
     Serial.println("Active");
     relayTimer = millis();
     notYetCalled = false;
+    digitalWrite(13,HIGH);
   } else if (millis() - relayTimer > duration && !turnedOff) {
     digitalWrite(pin, LOW);
-    Serial.println("Off");
+    Serial.println(millis() - relayTimer);
     turnedOff = true;
+    digitalWrite(13,LOW);
   }
 }

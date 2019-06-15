@@ -1,6 +1,5 @@
 void printFlightParameters() {
   Serial1.print(weightedFlightStage); Serial1.print(",");
-  Serial.print(primaryTrigger()); Serial.print(",");
   Serial.print(imuTrigger()); Serial.print(",");
   Serial.print(baroTrigger()); Serial.print(",");
   Serial.print(timerStage); Serial.print(",");

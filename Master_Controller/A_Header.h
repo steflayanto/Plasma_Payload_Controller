@@ -7,17 +7,17 @@
 #include <Adafruit_Simple_AHRS.h>
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
-//Time Estimates (time that has passed since launch)
-#define LATE_COAST_TIME 60  //time that late coast ends (apogee)
+//Time Estimates (time that has passed since launch) IN SECONDS
+#define LATE_COAST_TIME 40  //time that late coast ends (apogee)
 #define EARLY_COAST_TIME 20 //time that early coast ends
-#define ENGINE_BURN_TIME 10 //time that engine burn ends
+#define ENGINE_BURN_TIME 15 //time that engine burn ends
 
 //BME (ALTITUDES IN METERS not feet)
 #define FACTOR 0.2f
-#define LOW_BURN 10 //above this value means we're  in burn
-#define LOW_EARLY 20 //above this means in early coast
-#define LOW_LATE 30  //above means in late coast
-#define HIGH_LATE 50 //apogee
+#define LOW_BURN 50 //above this value means we're  in burn
+#define LOW_EARLY 4115 //above this means in early coast
+#define LOW_LATE 5300  //above means in late coast
+#define HIGH_LATE 7620 //apogee
 #define ALT_OFFSET -1401 // Based on elevation of spaceport america (1.401 km)
 
 #define BUZZER_INTERVAL 10000
@@ -69,3 +69,5 @@ double dangerAngle = 10;//33.0; // Highly arbitrary value in degrees //updated t
 
 //LSM Data Objects
 sensors_event_t accel, mag, gyro, temp;
+//LSM Noise Buffer
+int noiseBuffer = 15; //arbitrary value for now. Updated to +-4 after launched

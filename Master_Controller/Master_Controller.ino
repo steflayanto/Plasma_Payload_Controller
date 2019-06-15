@@ -5,6 +5,7 @@ void setup() {
   while (!Serial);     // For running on ESP boards. Will pause until serial console opens
 #endif
   Serial.begin(116200);
+  Serial1.begin(57600);
   initSensors();
   relayInit();
   initConeMAF();
@@ -13,8 +14,8 @@ void setup() {
 void loop() {
   updateTrackedValues(); //Updates the values that are relevant to the decision algorithm
   //transmitToLogger();    //Directly reads and sends all sensor data to serial monitor. Some unnecessary reads.
-  printFlightParameters();
-  Serial.println();
+  //printFlightParameters();
+  //Serial.println();
   if (activated) {
     return; //if already running, don't do anything below
   }

@@ -4,11 +4,11 @@
 #include <Adafruit_ADS1015.h>
 
 #define CHIP_SELECT 4
-#define WRITE false //CHANGE BEFORE FLIGHT
+#define WRITE true //CHANGE BEFORE FLIGHT
 
 int fileCount = 0;
 unsigned long fileCountTimer = 0;
-unsigned long frequency = 10000; //new file every 10 seconds (10,000ms)
+unsigned long frequency = 30000; //new file every 30 seconds (30,000ms)
 String inputData = "";
 
 //ADC data
