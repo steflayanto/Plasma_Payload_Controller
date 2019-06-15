@@ -1,26 +1,3 @@
-/* Header file for SARP Master Controller
-   Pinouts
-   0
-   1
-   2
-   3
-   4
-   5
-   6
-   7
-   8
-   9
-   10 FOR THE RELAY
-   11
-   12
-   13
-   A0
-   A1 Kyle's Circuit Input
-   A2
-   A3
-   A4
-   A5
-*/
 #include <Wire.h>
 #include <SPI.h>
 #include <Adafruit_Sensor.h>  // Used for all Adafruit Sensors
@@ -29,12 +6,28 @@
 #include <SparkFunTMP102.h>
 #include <Adafruit_Simple_AHRS.h>
 
+///////////////////////////////////////////////////////////////////////////////////////////////
+//Time Estimates (time that has passed since launch)
+#define LATE_COAST_TIME 60  //time that late coast ends (apogee)
+#define EARLY_COAST_TIME 20 //time that early coast ends
+#define ENGINE_BURN_TIME 10 //time that engine burn ends
+
+//BME (ALTITUDES IN METERS not feet)
+#define FACTOR 0.2f
+#define LOW_BURN 10 //above this value means we're  in burn
+#define LOW_EARLY 20 //above this means in early coast
+#define LOW_LATE 30  //above means in late coast
+#define HIGH_LATE 50 //apogee
+#define ALT_OFFSET -1401 // Based on elevation of spaceport america (1.401 km)
+
+#define BUZZER_INTERVAL 10000
+
+#define RELAY_PIN 11                //this means before compiling, find RELAY replace with 10
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Required for Serial on Zero based boards
 #if defined(ARDUINO_SAMD_ZERO) && defined(SERIAL_PORT_USBVIRTUAL)
 #define Serial SERIAL_PORT_USBVIRTUAL
 #endif
-
-#define RELAY_PIN 10                //this means before compiling, find RELAY replace with 10
 
 //This constant and struct are all that is needed for the MAF
 #define MAF_SIZE 5 // number of samples for the running avg
@@ -72,20 +65,7 @@ Adafruit_BME280 bme; // I2C
 TMP102 tempSens(0x48);
 
 //Danger Cone
-double dangerAngle = 33.0; // Highly arbitrary value in degrees
-
-//Time Estimates (cumulative duration)
-#define LATE_COAST_TIME 0
-#define EARLY_COAST_TIME 0
-#define ENGINE_BURN_TIME 0
+double dangerAngle = 10;//33.0; // Highly arbitrary value in degrees //updated to 33 later in flight.
 
 //LSM Data Objects
 sensors_event_t accel, mag, gyro, temp;
-
-//BME
-#define FACTOR 0.2f
-#define LOW_BURN 10
-#define LOW_EARLY 20 // equiv HIGH_BURN
-#define LOW_LATE 30  // equiv HIGH_EARLY
-#define HIGH_LATE 50
-#define ALT_OFFSET -1401 // Based on elevation of spaceport america (1.401 km)
